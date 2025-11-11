@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('company_name', 100)->unique();
+            $table->string('company_name', 255)->unique();
             $table->string('company_logo', 255)->nullable();
             $table->uuid('uuid')->unique();
             $table->string('address', 255)->nullable();
-            $table->string('phone', 20)->nullable();
-            $table->string('email', 100)->nullable();
+            $table->string('phone', 255)->nullable();
+            $table->string('email', 255)->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->dateTime('created_at')->useCurrent();
             $table->dateTime('updated_at')->useCurrent()->useCurrentOnUpdate();

@@ -16,12 +16,12 @@ return new class extends Migration
             $table->integer('id_company')->index();
             $table->string('name', 100)->nullable();
             $table->string('description', 255)->nullable();
-            $table->string('service_name', 50)->nullable();
-            $table->string('service_desk', 20)->nullable();
-            $table->string('queue_prefix', 10)->nullable();
+            $table->string('service_name', 255)->nullable();
+            $table->string('service_desk', 255)->nullable();
+            $table->string('queue_prefix', 255)->nullable();
             $table->integer('queue_total_digits')->default(3);
             $table->string('queue_colors', 255)->nullable();
-            $table->string('hash_code', 64)->unique();
+            $table->string('hash_code', 255)->unique();
             $table->enum('status', ['active', 'inactive', 'done'])->default('inactive');
             $table->dateTime('created_at')->useCurrent();
             $table->dateTime('updated_at')->useCurrent()->useCurrentOnUpdate();
