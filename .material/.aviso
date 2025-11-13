@@ -1,9 +1,10 @@
 php artisan make:
-npm run dev
+npm run dev - acionar vite
 
 
-====================================+
-user
-mEBa6AyePOPE6oPuH7VEKA37Ma2Ar8
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
+user                                 |
+mEBa6AyePOPE6oPuH7VEKA37Ma2Ar8       |
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
 git checkout -b "exemplo" && git add . && git commit -m "exemplo"

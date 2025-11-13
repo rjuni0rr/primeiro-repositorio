@@ -9,3 +9,11 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+.main-card{ @apply bg-white text-zinc-500 rounded-xl shadow-sw border-1 border-zinc-300 p-10}
+
+.title1{ @apply text-2xl font-bold text-zinc-900}
+.title2{ @apply text-xl font-semibold text-zinc-700}
+.title3{ @apply text-lg font-medium text-zinc-600}
+
+
