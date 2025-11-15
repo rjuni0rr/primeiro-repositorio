@@ -10,8 +10,13 @@
     @vite('resources/css/app.css')
 </head>
 <body class="bg-zinc-200">
+    {{--  user top bar  --}}
+    <x-layouts.user_top_bar/>
 
+    {{--  main horizontal menu  --}}
+    <x-layouts.main_menu/>
 
+    {{--  main content  --}}
     <div class="p-8">
         {{ $slot }}
     </div>

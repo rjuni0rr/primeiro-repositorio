@@ -15,6 +15,7 @@
                     <label for="username" class="label">Usuário</label>
                     <input type="email" class="input w-full" id="username" name="username" placeholder="Usuário" value="{{ old('username') }}">
                     {!! showValidationError('username', $errors) !!}
+                    {!! showServerError() !!}
                 </div>
 
                 <div class="mb-4">

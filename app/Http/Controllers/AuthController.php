@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use function Laravel\Prompts\password;
 
 class AuthController extends Controller
 {
@@ -43,21 +44,91 @@ class AuthController extends Controller
 
         // check if user exists and password matches
         if($user && Hash::check(trim($request->password), $user->password)){
-            //login successful
-            auth()->login($user);
-            dd(auth()->user());
+            //login user
+            $this->loginUser($user);
+
             // redirect to home page
             return redirect()->route('home');
 
+
         } else {
             //login failed
-            die('Login inválido');
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('server_error', 'Login inválido.');
         }
 
     }
 
+    private function loginUser($user)
+    {
+        // update last login and resets other fields
+        $user->last_login = now();
+        $user->code = null;
+        $user->code_expiration = null;
+        $user->blocked_until = null;
+        $user->save();
+
+        // place user in session
+        auth()->login($user);
+
+    }
+
+
     public function logout()
     {
         // logout de usuário autenticado
+        auth()->logout();
+
+        // invalidate session - clear all session data
+        session()->invalidate();
+
+        // regenerate session token
+        session()->regenerateToken();
+
+        return redirect()->route('login');
+
     }
+
+    public function changePassword()
+    {
+        return view('auth.change_password_frm', ['subtitle' => 'Alterar Senha']);
+
+    }
+
+    public function changePasswordSubmit(Request $request)
+    {
+        // enviar formulário
+        $request->validate(
+            [
+                'current_password' => 'required',
+                'new_password' => 'required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,16}$/|confirmed'
+            ],
+            [
+                'current_password' => 'A senha atual é obritatória.',
+                'new_password.required' => 'A nova senha é obrigatória.',
+                'new_password.regex' => 'A nova enha Deve conter entre 6 e 16 caracteres, ter uma letra maiúscula, uma minúscula e um algarismo.',
+                'new_password.confirmed' => 'As novas senhas não se coincidem.'
+            ]
+        );
+        // get authenticated user
+        $user = auth()->user();
+
+        // check if current password matches
+        if (Hash::check($request->current_password, $user->password)){
+
+            // update password
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+
+            return redirect()->route('home')->with('message',  'Senha alterada com sucesso!');
+
+        } else {
+            return redirect()->back()->with('server_error', 'Senha atual inválida.');
+        }
+    }
+
+
 }
+

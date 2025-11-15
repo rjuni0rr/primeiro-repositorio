@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MainController;
 
 Route::middleware(['guest'])->group(function (){
 
@@ -14,10 +15,9 @@ Route::middleware(['guest'])->group(function (){
 
 Route::middleware(['auth'])->group(function (){
 
-    Route::get('/', function (){
-        echo "Home Page!";
-    })->name('home');
-
+    Route::get('/', [MainController::class, 'index'])->name('home');
+    Route::get('/change-password', [AuthController::class, 'changePassword'])->name('change.password');
+    Route::post('/change-password', [AuthController::class, 'changePasswordSubmit'])->name('change.password.submit');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 });
