@@ -7,7 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ config('app.name') }} {!! empty($subtitle) ? '' : ' &vellip; ' . $subtitle !!}</title>
     <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/all.min.css') }}">
+
+    {{--  datatables  --}}
+    <link rel="stylesheet" href="{{ asset('assets/datatables/datatables.min.css') }}">
+    <script src="{{ asset('assets/datatables/datatables.min.js') }}"></script>
+
+    {{--  CSS  --}}
     @vite('resources/css/app.css')
+
 </head>
 <body class="bg-zinc-200">
     {{--  user top bar  --}}
