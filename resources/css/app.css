@@ -12,9 +12,9 @@
 
 .main-card{ @apply bg-white text-zinc-500 rounded-xl border-1 border-zinc-300 p-10}
 
-.title1{ @apply text-2xl font-bold text-zinc-900}
-.title2{ @apply text-xl font-semibold text-zinc-700}
-.title3{ @apply text-lg font-medium text-zinc-600}
+.title-1{ @apply text-2xl font-bold text-zinc-900}
+.title-2{ @apply text-xl font-semibold text-zinc-700}
+.title-3{ @apply text-lg font-medium text-zinc-600}
 
 hr { @apply border-zinc-300 }
 
