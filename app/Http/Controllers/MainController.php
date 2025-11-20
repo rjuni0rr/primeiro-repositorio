@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Queue;
+use App\Models\QueueTicket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -16,8 +17,12 @@ class MainController extends Controller
 
         $data = [
             'subtitle' => 'Home',
-            'queues' => $queues
+            'queues' => $this->getQueuesList(),
+            'companyName' => Auth::user()->company->company_name,
+            'companyTotal' => $this->getCompanyTotals()
         ];
+
+//        dd($data);
 
         return view('main.home', $data);
     }
@@ -55,6 +60,25 @@ class MainController extends Controller
             ->get();
     }
 
+    private function getCompanyTotals()
+    {
+        $companyId = Auth::user()->id_company;
+        $totalQueues = Queue::where('id_company', $companyId)->count();
+
+        $tickets = QueueTicket::whereHas('queue', function ($query) use ($companyId){
+            $query->where('id_company', $companyId);
+        })->get();
+
+        return [
+            'total_queues' => $totalQueues,
+            'total_tickets' => $tickets->count(),
+            'total_dismissed' => $tickets->where('queue_ticket_status', 'dismissed')->count(),
+            'total_not_attended' => $tickets->where('queue_ticket_status', 'not_attended')->count(),
+            'total_called' => $tickets->where('queue_ticket_status', 'called')->count(),
+            'total_waiting' => $tickets->where('queue_ticket_status', 'waiting')->count(),
+
+        ];
+    }
 
     public function queueDetails($id)
     {
@@ -106,5 +130,19 @@ class MainController extends Controller
         ];
 
         return view('main.queue_details', $data);
+    }
+
+    public function createQueue()
+    {
+        $data = [
+            'subtitle' => 'Criar fila'
+        ];
+
+        return view('main.queue_create_frm', $data);
+    }
+
+    public function createQueueSubmit(Request $request)
+    {
+        echo "Create queue submit";
     }
 }
