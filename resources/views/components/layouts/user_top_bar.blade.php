@@ -1,7 +1,7 @@
 <div class="flex justify-between items-center bg-zinc-900 text-white p-4">
 
     <div class="flex items-center">
-        <a href="#">
+        <a href="{{ route('home') }}">
             <div class="flex items-center">
                 <img src="#" class="w-8 h-8 me-2" alt="Logo">
                 <h3 class="text-2xl uppercase">{{ config('app.name') }}</h3>
