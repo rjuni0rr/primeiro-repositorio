@@ -28,7 +28,7 @@ class AuthController extends Controller
                 'username.required' => 'O usuário é obrigatório',
                 'username.email' => 'O usuário deve ter um e-mail válido',
                 'password.required' => 'A Senha é obrigatória',
-                'password.regex' => 'A Senha Deve conter entre 6 e 16 caracteres, ter uma letra maiúscula, uma minúscula e um algarismo.',
+                'password.regex' => 'A Senha deve conter entre 6 e 16 caracteres, ter uma letra maiúscula, uma minúscula e um algarismo.',
             ]
         );
 
@@ -108,7 +108,7 @@ class AuthController extends Controller
             [
                 'current_password' => 'A senha atual é obritatória.',
                 'new_password.required' => 'A nova senha é obrigatória.',
-                'new_password.regex' => 'A nova enha Deve conter entre 6 e 16 caracteres, ter uma letra maiúscula, uma minúscula e um algarismo.',
+                'new_password.regex' => 'A nova senha deve conter entre 6 e 16 caracteres, ter uma letra maiúscula, uma minúscula e um algarismo.',
                 'new_password.confirmed' => 'As novas senhas não se coincidem.'
             ]
         );

@@ -24,8 +24,15 @@ Route::middleware(['auth'])->group(function (){
 
     // edit queue
     Route::get('/queue/edit/{id}', [MainController::class, 'editQueue'])->name('queue.edit');
-    Route::post('/queue/edit/', [MainController::class, 'editQueueSubmit'])->name('queue.edit.submit');
+    Route::post('/queue/edit', [MainController::class, 'editQueueSubmit'])->name('queue.edit.submit');
 
+    // clone a queue
+    Route::get('/queue/clone/{id}', [MainController::class, 'cloneQueue'])->name('queue.clone');
+    Route::post('/queue/clone', [MainController::class, 'cloneQueueSubmit'])->name('queue.clone.submit');
+
+    // delete a queue
+    Route::get('/queue/delete/{id}', [MainController::class, 'deleteQueue'])->name('queue.delete');
+    Route::get('/queue/delete-confirm/{id}', [MainController::class, 'deleteQueueConfirm'])->name('queue.delete.confirm');
 
     //    queue details
     Route::get('/queue/{id}', [MainController::class, 'queueDetails'])->name('queue.details');
@@ -38,3 +45,4 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 });
+
