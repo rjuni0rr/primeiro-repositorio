@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\BundlesController;
 
 Route::middleware(['guest'])->group(function (){
 
@@ -16,6 +17,8 @@ Route::middleware(['guest'])->group(function (){
 Route::middleware(['auth'])->group(function (){
 
     Route::get('/', [MainController::class, 'index'])->name('home');
+
+    // QUEUES ----------------------------------------------------------------------------------------------------------
 
     //    create a new queue
     Route::get('/queue/create', [MainController::class, 'createQueue'])->name('queue.create');
@@ -34,8 +37,28 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/queue/delete/{id}', [MainController::class, 'deleteQueue'])->name('queue.delete');
     Route::get('/queue/delete-confirm/{id}', [MainController::class, 'deleteQueueConfirm'])->name('queue.delete.confirm');
 
+    // perm delete
+    Route::get('/queue/perm-delete/{id}', [MainController::class, 'permDeleteQueue'])->name('perm.queue.delete');
+    Route::get('/queue/perm-delete-confirm/{id}', [MainController::class, 'permDeleteQueueConfirm'])->name('perm.queue.delete.confirm');
+
+    // restore deleted queue
+    Route::get('/queue/restore/{id}', [MainController::class, 'restoreQueue'])->name('queue.restore');
+
     //    queue details
     Route::get('/queue/{id}', [MainController::class, 'queueDetails'])->name('queue.details');
+
+
+    // BUNDLES ---------------------------------------------------------------------------------------------------------
+
+    Route::get('/bundles', [BundlesController::class, 'index'])->name('bundles.home');
+    Route::get('/bundles/create', [BundlesController::class, 'createBundle'])->name('bundles.create');
+    Route::post('/bundles/create', [BundlesController::class, 'createBundleSubmit'])->name('bundles.create.submit');
+
+
+
+
+
+    // USER ------------------------------------------------------------------------------------------------------------
 
     //    change password
     Route::get('/change-password', [AuthController::class, 'changePassword'])->name('change.password');

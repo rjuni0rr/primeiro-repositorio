@@ -78,4 +78,23 @@ if(!function_exists('getQueueStateText')) {
     }
 }
 
+if(!function_exists('getQueueStatePreview')) {
+    function getQueuePreview($queue)
+    {
+        $previewHTML = '<div class="text-center">';
+        $colors = json_decode($queue->queue_colors, true);
+
+        // prefix
+        if($queue->prefix !== '-'){
+            $previewHTML .= '<spam style="padding: 2px 6px; background-color:' . $colors['prefix_bg_color'] . '; color:' . $colors['prefix_text_color'] .'">'. $queue->queue_prefix .'</spam>';
+        }
+
+        // ticket number
+
+        $previewHTML .= '</div>';
+
+        return $previewHTML;
+    }
+}
+
 

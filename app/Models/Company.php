@@ -20,4 +20,9 @@ class Company extends Model
     {
         return $this->hasMany(Queue::class, 'id_company');
     }
+
+    public function bundles()
+    {
+        return $this->hasMany(Bundle::class, 'id_company');
+    }
 }

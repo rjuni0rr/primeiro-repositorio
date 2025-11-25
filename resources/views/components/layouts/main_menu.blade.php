@@ -1,12 +1,10 @@
-<div class="flex justify-center p-4 bg-zinc-100">
+<div class="flex p-4 px-8 bg-cyan-700">
 
-    <div class="flex gap-20 text-lg">
+    <div class="flex gap-4 text-lg">
 
-        <a href="#" class="link">Home</a>
-        <a href="#" class="link">About</a>
-        <a href="#" class="link">Contact</a>
-        <a href="#" class="link">Services</a>
-        <a href="#" class="link">Blog</a>
+        <a href="{{ route('home') }}" class="btn-white"><i class="fa-solid fa-house me-2"></i>Gestão de filas</a>
+        <a href="{{ route('bundles.home') }}" class="btn-white"><i class="fa-solid fa-table-list me-2"></i>Gestão de bundles</a>
+
     </div>
 
 </div>
