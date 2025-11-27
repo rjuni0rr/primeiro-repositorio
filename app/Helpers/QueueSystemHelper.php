@@ -91,6 +91,8 @@ if(!function_exists('getQueueStatePreview')) {
 
         // ticket number
 
+        $previewHTML .= '<span style="padding: 2px 6px; background-color:' . $colors['number_bg_color'] . '; color: ' . $colors['number_text_color'] . '">'. getFormattedTicketNumber(1, null, $queue->queue_total_digits) .'</span>';
+
         $previewHTML .= '</div>';
 
         return $previewHTML;

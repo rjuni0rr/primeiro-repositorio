@@ -162,9 +162,9 @@
 
         // Add coloris
         Coloris({el: '#color_1', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_1', '#0d3561') }}'});
-        Coloris({el: '#color_1', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_2', '#ffffff') }}'});
-        Coloris({el: '#color_1', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_3', '#adb4b9') }}'});
-        Coloris({el: '#color_1', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_4', '#0d3561') }}'});
+        Coloris({el: '#color_2', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_2', '#ffffff') }}'});
+        Coloris({el: '#color_3', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_3', '#adb4b9') }}'});
+        Coloris({el: '#color_4', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_4', '#0d3561') }}'});
 
         // inputs
         const prefix = document.querySelector("#prefix");

@@ -149,9 +149,9 @@
 
         // Add coloris
         Coloris({el: '#color_1', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_1', $queueColors['prefix_bg_color']) }}'});
-        Coloris({el: '#color_1', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_2', $queueColors['prefix_text_color']) }}'});
-        Coloris({el: '#color_1', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_3', $queueColors['number_bg_color']) }}'});
-        Coloris({el: '#color_1', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_4', $queueColors['number_text_color']) }}'});
+        Coloris({el: '#color_2', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_2', $queueColors['prefix_text_color']) }}'});
+        Coloris({el: '#color_3', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_3', $queueColors['number_bg_color']) }}'});
+        Coloris({el: '#color_4', alpha: false, swatches: fixedColors, defaultColor: '{{ old('color_4', $queueColors['number_text_color']) }}'});
 
         // inputs
         const prefix = document.querySelector("#prefix");
