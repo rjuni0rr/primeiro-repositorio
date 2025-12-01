@@ -25,11 +25,21 @@
                 </thead>
                 <tbody>
                 @foreach($bundles as $bundle)
-                    <tr>
+                    <tr class="{{ $bundle->deleted_at ? 'text-red-600' : '' }}">
                         <td>{{ $bundle->name }}</td>
                         <td>{{ count(json_decode($bundle->queues)) }}</td>
                         <td>{{ $bundle->credential_username }}</td>
-                        <td>[acoes]</td>
+                        <td>
+                            <div class="flex justify-end gap-2">
+                                @if($bundle->deleted_at === null)
+                                    <a href="{{ route('bundles.edit', ['id' => Crypt::encrypt($bundle->id)]) }}" class="btn me-2"><i class="far fa-edit"></i></a>
+                                    <a href="{{ route('bundles.delete', ['id' => Crypt::encrypt($bundle->id)]) }}" class="btn-red"><i class="far fa-trash-can"></i></a>
+                                @else
+                                    <a href="{{ route('bundles.restore', ['id' => Crypt::encrypt($bundle->id)]) }}" class="btn-green"><i class="fa-solid fa-trash-arrow-up"></i></a>
+                                @endif
+
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

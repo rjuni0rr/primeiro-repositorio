@@ -1,11 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\BundlesController;
+use App\Http\Controllers\TicketDispenserController;
+use App\Http\Middleware\TicketDispenserSession;
 
+// guest routes
 Route::middleware(['guest'])->group(function (){
 
     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -13,7 +15,7 @@ Route::middleware(['guest'])->group(function (){
 
 });
 
-
+// auth routes
 Route::middleware(['auth'])->group(function (){
 
     Route::get('/', [MainController::class, 'index'])->name('home');
@@ -55,6 +57,14 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/bundles/create', [BundlesController::class, 'createBundleSubmit'])->name('bundles.create.submit');
     Route::get('bundles/generate-credential-value/{num_chars}', [BundlesController::class, 'generateCredentialValue'])->name('bundles.generate.credential.value');
 
+    Route::get('/bundles/edit/{id}', [BundlesController::class, 'edit'])->name('bundles.edit');
+    Route::post('/bundles/edit', [BundlesController::class, 'editSubmit'])->name('bundles.edit.submit');
+
+    Route::get('/bundles/delete/{id}', [BundlesController::class, 'delete'])->name('bundles.delete');
+    Route::get('/bundles/delete-confirm/{id}', [BundlesController::class, 'deleteConfirm'])->name('bundles.delete.confirm');
+
+    Route::get('/bundles/restore/{id}', [MainController::class, 'restore'])->name('bundles.restore');
+
     // USER ------------------------------------------------------------------------------------------------------------
 
     //    change password
@@ -66,3 +76,18 @@ Route::middleware(['auth'])->group(function (){
 
 });
 
+// ticket dispenser routes
+Route::middleware([TicketDispenserSession::class])->group(function (){
+    Route::get('/dispenser', [TicketDispenserController::class, 'index'])->name('dispenser')->middleware();
+});
+
+Route::get('/dispenser/credentials', [TicketDispenserController::class, 'credentials'])->name('dispenser.credentials');
+Route::post('/dispenser/credentials', [TicketDispenserController::class, 'credentialsSubmit'])->name('dispenser.credentials.submit');
+
+Route::get('/dispenser/test-add-session', function (){
+    session()->put('ticket_dispenser_credential', 'abc123');
+});
+
+Route::get('/dispenser/test-remove-session', function (){
+    session()->forget('ticket_dispenser_credential');
+});
