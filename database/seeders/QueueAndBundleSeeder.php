@@ -116,6 +116,28 @@ class QueueAndBundleSeeder extends Seeder
                 'hash_code' => Str::random(64),
                 'status' => 'active'
             ],
+            [
+                'name' => 'Fila Número 07',
+                'description' => 'Fila de atendimento geral  dermatologia',
+                'service_name' => 'Dermatologia',
+                'service_desk' => 'Balcão 05',
+                'queue_prefix' => 'E',
+                'queue_total_digits' => 2,
+                'queue_colors' => json_encode($queueColors),
+                'hash_code' => Str::random(64),
+                'status' => 'active'
+            ],
+            [
+                'name' => 'Fila Número 08',
+                'description' => 'Fila de atendimento para ',
+                'service_name' => 'Ortopedia',
+                'service_desk' => 'Balcão 06',
+                'queue_prefix' => 'F',
+                'queue_total_digits' => 2,
+                'queue_colors' => json_encode($queueColors),
+                'hash_code' => Str::random(64),
+                'status' => 'active'
+            ],
         ];
 
         foreach ($data as $queue) {
@@ -144,22 +166,22 @@ class QueueAndBundleSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'Filas de espera 0!',
+                'name' => 'Filas de espera 01',
                 'queues' => array_slice($hash_codes, 0, 3),
-                'credential_username' => Str::random(32),
-                'credential_password' => Str::random(32),
+                'credential_username' => Str::random(64),
+                'credential_password' => Str::random(64),
             ],
             [
                 'name' => 'Filas de espera 02',
                 'queues' => array_slice($hash_codes, -3),
-                'credential_username' => Str::random(32),
-                'credential_password' => Str::random(32),
+                'credential_username' => Str::random(64),
+                'credential_password' => Str::random(64),
             ],
             [
                 'name' => 'Filas de espera 03',
-                'queues' => $hash_codes,
-                'credential_username' => Str::random(32),
-                'credential_password' => Str::random(32),
+                'queues' => array_slice($hash_codes, 6),
+                'credential_username' => Str::random(64),
+                'credential_password' => Str::random(64),
             ],
         ];
 

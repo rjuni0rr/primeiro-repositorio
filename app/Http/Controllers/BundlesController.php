@@ -62,6 +62,12 @@ class BundlesController extends Controller
             return redirect()->back()->withInput()->withErrors(['queues_list' => 'A lista de filas é obrigatória.']);
         }
 
+        // check if the queues list less than 8 queues
+        $tmp = json_decode($request->queues_list, true);
+        if (count($tmp) > 8){
+            return redirect()->back()->withInput()->withErrors(['queues_list' => 'A lista de filas deve conter no máximo 8 filas.']);
+        }
+
         // check if the name of the bundle already exists
         $bundle_name = $request->bundle_name;
         $bundleExists = auth()->user()->company->bundles()->where('name', $bundle_name)->exists();
@@ -174,6 +180,12 @@ class BundlesController extends Controller
         // check if the queue list is a valid json and the json isn't empty
         if (empty($request->queues_list) || json_decode($request->queues_list) == null || empty(json_decode($request->queues_list))){
             return redirect()->back()->withInput()->withErrors(['queues_list' => 'A lista de filas é obrigatória.']);
+        }
+
+        // check if the queues list less than 8 queues
+        $tmp = json_decode($request->queues_list, true);
+        if (count($tmp) > 8){
+            return redirect()->back()->withInput()->withErrors(['queues_list' => 'A lista de filas deve conter no máximo 8 filas.']);
         }
 
         // check if the name of the bundle already exists

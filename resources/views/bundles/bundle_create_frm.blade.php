@@ -116,7 +116,11 @@
                     // remove a queue do bundle, considerando que queues e igual a todas as queues do bundle, exceto a que é diferente
                     queues = queues.filter(queue => queue.hash_code !== queueHashCode);
                 } else {
-                    // adiciona a queue do bundle
+                    // check if the limit is ok
+                    if (queues.length == 8) {
+                        return;
+                    }
+
                     queues.push({
                         'hash_code': queueHashCode,
                         'name': queueName,

@@ -84,10 +84,4 @@ Route::middleware([TicketDispenserSession::class])->group(function (){
 Route::get('/dispenser/credentials', [TicketDispenserController::class, 'credentials'])->name('dispenser.credentials');
 Route::post('/dispenser/credentials', [TicketDispenserController::class, 'credentialsSubmit'])->name('dispenser.credentials.submit');
 
-Route::get('/dispenser/test-add-session', function (){
-    session()->put('ticket_dispenser_credential', 'abc123');
-});
 
-Route::get('/dispenser/test-remove-session', function (){
-    session()->forget('ticket_dispenser_credential');
-});
