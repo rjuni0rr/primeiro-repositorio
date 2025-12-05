@@ -7,23 +7,36 @@
         </div>
 
         <div class="main-card flex gap-4 w-full">
-
-            <div class="flex flex-wrap w-full border-1 border-slate-300 rounded-xl">
-
-                <div class="w-1/2 p-4"><div class="main-card">Fila de espera 1</div></div>
-                <div class="w-1/2 p-4"><div class="main-card">Fila de espera 2</div></div>
-                <div class="w-1/2 p-4"><div class="main-card">Fila de espera 3</div></div>
-                <div class="w-1/2 p-4"><div class="main-card">Fila de espera 4</div></div>
-                <div class="w-1/2 p-4"><div class="main-card">Fila de espera 5</div></div>
-                <div class="w-1/2 p-4"><div class="main-card">Fila de espera 6</div></div>
-                <div class="w-1/2 p-4"><div class="main-card">Fila de espera 7</div></div>
-                <div class="w-1/2 p-4"><div class="main-card">Fila de espera 8</div></div>
-            </div>
+            <div id="queues" class="flex flex-wrap w-full border-1 border-slate-300 rounded-xl"></div>
 
             <div class="flex w-1/4 h-100 border-1 border-slate-300 rounded-xl p-4">
-                preview to ticket
+                [preview to ticket]
             </div>
         </div>
-    </div>
 
+    </div>
+    <script>
+        const url = "{{ route('dispenser.get.bundle.data', ['credential' => $credential]) }}";
+        // const queuesContainer = document.querySelector("#queues");
+
+
+        async function getBundleData(url){
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok){
+                    throw new Error('Erro ao buscar dados: ' + response.status);
+                }
+                return await response.json();
+            } catch (error){
+                console.error(error);
+                return null;
+            }
+        }
+
+        getBundleData(url)
+            .then(data => {
+                console.log(data);
+            });
+    </script>
 </x-layouts.guest-layout>

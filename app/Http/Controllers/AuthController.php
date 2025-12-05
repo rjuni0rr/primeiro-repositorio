@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use function Laravel\Prompts\password;
 
 class AuthController extends Controller
 {
@@ -18,25 +17,25 @@ class AuthController extends Controller
     {
         // form validation
         $request->validate(
-            // rules for validation
+        // rules for validation
             [
                 'username' => 'required|email',
                 'password' => 'required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,16}$/'
             ],
             // error messages
             [
-                'username.required' => 'O usuário é obrigatório',
-                'username.email' => 'O usuário deve ter um e-mail válido',
-                'password.required' => 'A Senha é obrigatória',
-                'password.regex' => 'A Senha deve conter entre 6 e 16 caracteres, ter uma letra maiúscula, uma minúscula e um algarismo.',
+                'username.required' => 'O usuário é obrigatório.',
+                'username.email' => 'O usuário deve ser um e-mail válido.',
+                'password.required' => 'A senha é obrigatória.',
+                'password.regex' => 'A senha deve conter entre 6 e 16 caracteres, ter uma maiúscula, uma minúscula e um algarismo.'
             ]
         );
 
-        // user authenticator
+        // user authentication
         $user = User::where('email', trim($request->username))
             ->where('active', true)
             ->whereNull('deleted_at')
-            ->where(function ($query){
+            ->where(function($query){
                 $query->whereNull('blocked_until')
                     ->orWhere('blocked_until', '<', now());
             })
@@ -44,21 +43,21 @@ class AuthController extends Controller
 
         // check if user exists and password matches
         if($user && Hash::check(trim($request->password), $user->password)){
-            //login user
+
+            // login user
             $this->loginUser($user);
 
             // redirect to home page
             return redirect()->route('home');
 
-
         } else {
-            //login failed
+
+            // login failed
             return redirect()
                 ->back()
                 ->withInput()
                 ->with('server_error', 'Login inválido.');
         }
-
     }
 
     private function loginUser($user)
@@ -72,13 +71,11 @@ class AuthController extends Controller
 
         // place user in session
         auth()->login($user);
-
     }
-
 
     public function logout()
     {
-        // logout de usuário autenticado
+        // logout
         auth()->logout();
 
         // invalidate session - clear all session data
@@ -88,47 +85,45 @@ class AuthController extends Controller
         session()->regenerateToken();
 
         return redirect()->route('login');
-
     }
 
     public function changePassword()
     {
-        return view('auth.change_password_frm', ['subtitle' => 'Alterar Senha']);
-
+        return view('auth.change_password_frm', ['subtitle' => 'Alterar senha']);
     }
 
     public function changePasswordSubmit(Request $request)
     {
-        // enviar formulário
+        // form validation
         $request->validate(
             [
                 'current_password' => 'required',
                 'new_password' => 'required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,16}$/|confirmed'
             ],
             [
-                'current_password' => 'A senha atual é obritatória.',
+                'current_password' => 'A senha atual é obrigatória.',
                 'new_password.required' => 'A nova senha é obrigatória.',
-                'new_password.regex' => 'A nova senha deve conter entre 6 e 16 caracteres, ter uma letra maiúscula, uma minúscula e um algarismo.',
-                'new_password.confirmed' => 'As novas senhas não se coincidem.'
+                'new_password.regex' => 'A nova senha deve conter entre 6 e 16 caracteres, ter uma maiúscula, uma minúscula e um algarismo.',
+                'new_password.confirmed' => 'A nova senha e a repetição não estão iguais.',
             ]
         );
+
         // get authenticated user
         $user = auth()->user();
 
         // check if current password matches
-        if (Hash::check($request->current_password, $user->password)){
+        if(Hash::check($request->current_password, $user->password)){
 
             // update password
             $user->password = Hash::make($request->new_password);
             $user->save();
 
-            return redirect()->route('home')->with('message',  'Senha alterada com sucesso!');
+            return redirect()->route('home')->with('message', 'Senha alterada com sucesso');
 
         } else {
+
             return redirect()->back()->with('server_error', 'Senha atual inválida.');
+
         }
     }
-
-
 }
-

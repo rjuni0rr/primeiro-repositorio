@@ -3,7 +3,7 @@
     <div class="flex items-center">
         <a href="{{ route('home') }}">
             <div class="flex items-center">
-                <img src="#" class="w-8 h-8 me-2" alt="Logo">
+                <img src="{{ asset('assets/images/favicon.png') }}" class="w-8 h-8 me-2" alt="Logo">
                 <h3 class="text-2xl uppercase">{{ config('app.name') }}</h3>
             </div>
         </a>

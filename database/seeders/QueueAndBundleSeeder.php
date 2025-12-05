@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -14,7 +13,7 @@ class QueueAndBundleSeeder extends Seeder
      */
     public function run(): void
     {
-        // truncate queues, queue_tickets and bundles
+        // truncate queues, queue_tickets e bundles
         DB::table('queues')->truncate();
         DB::table('queue_tickets')->truncate();
         DB::table('bundles')->truncate();
@@ -35,8 +34,8 @@ class QueueAndBundleSeeder extends Seeder
         echo "Bundles criados com sucesso! Lista de credenciais" . PHP_EOL;
         foreach ($bundles as $bundle) {
             echo "Bundle name: " . $bundle['name'] . PHP_EOL;
-            echo "Credencial username: " . $bundle['credential_username'] . PHP_EOL . "Credencial password: " . $bundle['credential_username'] . PHP_EOL;
-            echo "------------------------------------------" . PHP_EOL;
+            echo "Crendencial username: " . $bundle['credential_username'] . PHP_EOL . "Credencial password: " . $bundle['credential_password'] . PHP_EOL;
+            echo "----------------------------------------" . PHP_EOL;
         }
     }
 
@@ -51,7 +50,7 @@ class QueueAndBundleSeeder extends Seeder
 
         $data = [
             [
-                'name' => 'Fila Número 01',
+                'name' => 'Fila número 01',
                 'description' => 'Fila de atendimento geral para clientes',
                 'service_name' => 'Atendimento Geral',
                 'service_desk' => 'Balcão 01',
@@ -59,54 +58,54 @@ class QueueAndBundleSeeder extends Seeder
                 'queue_total_digits' => 2,
                 'queue_colors' => json_encode($queueColors),
                 'hash_code' => Str::random(64),
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
-                'name' => 'Fila Número 02',
-                'description' => 'Fila de atendimento geral para cardiologia',
+                'name' => 'Fila número 02',
+                'description' => 'Fila de atendimento para cardiologia',
                 'service_name' => 'Cardiologia',
                 'service_desk' => 'Balcão 02',
                 'queue_prefix' => 'B',
                 'queue_total_digits' => 2,
                 'queue_colors' => json_encode($queueColors),
                 'hash_code' => Str::random(64),
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
-                'name' => 'Fila Número 03',
-                'description' => 'Fila de atendimento geral para oftamologia',
-                'service_name' => 'Oftamologia',
+                'name' => 'Fila número 03',
+                'description' => 'Fila de atendimento para oftalmologia',
+                'service_name' => 'Oftalmologia',
                 'service_desk' => 'Balcão 03',
                 'queue_prefix' => 'C',
                 'queue_total_digits' => 2,
                 'queue_colors' => json_encode($queueColors),
                 'hash_code' => Str::random(64),
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
-                'name' => 'Fila Número 04',
-                'description' => 'Fila de atendimento geral para pediatra',
-                'service_name' => 'Pediatra',
+                'name' => 'Fila número 04',
+                'description' => 'Fila de atendimento para pediatria',
+                'service_name' => 'Pediatria',
                 'service_desk' => 'Balcão 04',
                 'queue_prefix' => 'D',
                 'queue_total_digits' => 2,
                 'queue_colors' => json_encode($queueColors),
                 'hash_code' => Str::random(64),
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
-                'name' => 'Fila Número 05',
-                'description' => 'Fila de atendimento geral para dermatologia',
+                'name' => 'Fila número 05',
+                'description' => 'Fila de atendimento para dermatologia',
                 'service_name' => 'Dermatologia',
                 'service_desk' => 'Balcão 05',
                 'queue_prefix' => 'E',
                 'queue_total_digits' => 2,
                 'queue_colors' => json_encode($queueColors),
                 'hash_code' => Str::random(64),
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
-                'name' => 'Fila Número 06',
+                'name' => 'Fila número 06',
                 'description' => 'Fila de atendimento para ortopedia',
                 'service_name' => 'Ortopedia',
                 'service_desk' => 'Balcão 06',
@@ -114,35 +113,13 @@ class QueueAndBundleSeeder extends Seeder
                 'queue_total_digits' => 2,
                 'queue_colors' => json_encode($queueColors),
                 'hash_code' => Str::random(64),
-                'status' => 'active'
-            ],
-            [
-                'name' => 'Fila Número 07',
-                'description' => 'Fila de atendimento geral  dermatologia',
-                'service_name' => 'Dermatologia',
-                'service_desk' => 'Balcão 05',
-                'queue_prefix' => 'E',
-                'queue_total_digits' => 2,
-                'queue_colors' => json_encode($queueColors),
-                'hash_code' => Str::random(64),
-                'status' => 'active'
-            ],
-            [
-                'name' => 'Fila Número 08',
-                'description' => 'Fila de atendimento para ',
-                'service_name' => 'Ortopedia',
-                'service_desk' => 'Balcão 06',
-                'queue_prefix' => 'F',
-                'queue_total_digits' => 2,
-                'queue_colors' => json_encode($queueColors),
-                'hash_code' => Str::random(64),
-                'status' => 'active'
+                'status' => 'active',
             ],
         ];
 
         foreach ($data as $queue) {
             DB::table('queues')->insert([
-                'id_company' => 1,
+                'id_company' => 1, // Assuming company_id = 1
                 'name' => $queue['name'],
                 'description' => $queue['description'],
                 'service_name' => $queue['service_name'],
@@ -151,12 +128,12 @@ class QueueAndBundleSeeder extends Seeder
                 'queue_total_digits' => $queue['queue_total_digits'],
                 'queue_colors' => $queue['queue_colors'],
                 'hash_code' => $queue['hash_code'],
-                'status' => $queue['status']
+                'status' => $queue['status'],
             ]);
         }
 
-        return array_map(function ($queue){
-            return[
+        return array_map(function ($queue) {
+            return [
                 'hash_code' => $queue['hash_code'],
             ];
         }, $data);
@@ -179,7 +156,7 @@ class QueueAndBundleSeeder extends Seeder
             ],
             [
                 'name' => 'Filas de espera 03',
-                'queues' => array_slice($hash_codes, 6),
+                'queues' => $hash_codes,
                 'credential_username' => Str::random(64),
                 'credential_password' => Str::random(64),
             ],
@@ -187,7 +164,7 @@ class QueueAndBundleSeeder extends Seeder
 
         foreach ($data as $bundle) {
             DB::table('bundles')->insert([
-                'id_company' => 1,
+                'id_company' => 1, // Assuming company_id = 1
                 'name' => $bundle['name'],
                 'queues' => json_encode($bundle['queues']),
                 'credential_username' => $bundle['credential_username'],
@@ -196,11 +173,11 @@ class QueueAndBundleSeeder extends Seeder
         }
 
         // return the bundles credentials
-        return array_map(function ($bundle){
+        return array_map(function ($bundle) {
             return [
                 'name' => $bundle['name'],
                 'credential_username' => $bundle['credential_username'],
-                'credential_password' => $bundle['credential_password']
+                'credential_password' => $bundle['credential_password'],
             ];
         }, $data);
     }
