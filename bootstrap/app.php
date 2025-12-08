@@ -14,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // colocou uma limitação de validação de metodos POST (csrf)
         $middleware->validateCsrfTokens(except: [
             '/dispenser/get-bundle-data',
-            '/dispenser/get-ticket'
+            '/dispenser/get-ticket',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

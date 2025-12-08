@@ -9,9 +9,9 @@ class QueueTicket extends Model
 {
     use SoftDeletes;
 
-    // Realação entre Ticket e Queue
+    // relação de ticket com fila de espera. Um ticket só pode pertencer a uma fila de espera.
     public function queue()
     {
-        return $this->belongsTo(User::class, 'id_queue');
+        return $this->belongsTo(Queue::class, 'id_queue');
     }
 }

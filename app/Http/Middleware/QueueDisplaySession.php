@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TicketDispenserSession
+class QueueDisplaySession
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,8 @@ class TicketDispenserSession
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->session()->has('ticket_dispenser_credential')) {
-            return redirect()->route('dispenser.credentials');
+        if (!$request->session()->has('queues_display_credential')) {
+            return redirect()->route('queues.display.credentials');
         }
 
         return $next($request);

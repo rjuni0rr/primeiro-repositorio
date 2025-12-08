@@ -6,7 +6,10 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\BundlesController;
 use App\Http\Controllers\TicketDispenserController;
 use App\Http\Middleware\TicketDispenserSession;
+use App\Http\Middleware\QueueDisplaySession;
+use App\Http\Controllers\QueuesDisplayController;
 
+// ----------------------------------------------------------------
 // guest routes
 Route::middleware(['guest'])->group(function (){
 
@@ -16,6 +19,7 @@ Route::middleware(['guest'])->group(function (){
 
 });
 
+// ----------------------------------------------------------------
 // auth routes
 Route::middleware(['auth'])->group(function(){
 
@@ -70,6 +74,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
+
 // ticket dispenser routes
 Route::middleware([TicketDispenserSession::class])->group(function (){
     Route::get('/dispenser', [TicketDispenserController::class, 'index'])->name('dispenser');
@@ -79,4 +84,15 @@ Route::middleware([TicketDispenserSession::class])->group(function (){
 
 Route::get('/dispenser/credentials', [TicketDispenserController::class, 'credentials'])->name('dispenser.credentials');
 Route::post('/dispenser/credentials', [TicketDispenserController::class, 'credentialsSubmit'])->name('dispenser.credentials.submit');
+
+// queues display routes
+Route::middleware([QueueDisplaySession::class])->group(function (){
+    Route::get('/queues-display', [QueuesDisplayController::class, 'index'])->name('queues.display');
+    Route::post('/queues-display/get-bundle-data', [QueuesDisplayController::class, 'getBundleData'])->name('queues.display.get.bundle.data');
+});
+
+Route::get('/queues-display/credentials', [QueuesDisplayController::class, 'credentials'])->name('queues.display.credentials');
+Route::post('/queues-display/credentials', [QueuesDisplayController::class, 'credentialsSubmit'])->name('queues.display.credentials.submit');
+
+
 
