@@ -135,13 +135,6 @@ class TicketDispenserController extends Controller
 
     public function getTicket(Request $request)
     {
-//        return response()->json([
-//            'status' => 'success',
-//            'code' => 200,
-//            'message' => 'Ticket criado com sucesso',
-//            'hash_code' => $request->hash_code,
-//        ]);
-
         // check if the hash_code exists in the request
         if(!$request->has('hash_code')) {
             return response()->json([
@@ -176,12 +169,12 @@ class TicketDispenserController extends Controller
             $newTicketNumber = 1;
         }
 
-//        $newTicket = new QueueTicket();
-//        $newTicket->id_queue = $queue->id;
-//        $newTicket->queue_ticket_number = $newTicketNumber;
-//        $newTicket->queue_ticket_created_at = now();
-//        $newTicket->queue_ticket_status = 'waiting';
-//        $newTicket->save();
+        $newTicket = new QueueTicket();
+        $newTicket->id_queue = $queue->id;
+        $newTicket->queue_ticket_number = $newTicketNumber;
+        $newTicket->queue_ticket_created_at = now();
+        $newTicket->queue_ticket_status = 'waiting';
+        $newTicket->save();
 
         // return the ticket information as JSON
         return response()->json([
