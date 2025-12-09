@@ -18,21 +18,22 @@ class QueueTicketSeeder extends Seeder
 
         $queueIDs = DB::table('queues')->pluck('id')->toArray();
 
-        foreach ($queueIDs as $queueID){
+        foreach ($queueIDs as $queueID) {
 
             $totalTickets = rand(50, 200);
 
             $createdAt = now();
             $calledAt = now()->addMinutes(2);
 
-            for ($i = 0; $i < $totalTickets; $i++){
-                // status: 'waiting', 'called', 'not_attended', 'dismissed'
-                $status = '';
-                $statusTmp = rand(1, 4);
+            for($i = 0; $i < $totalTickets; $i++) {
 
-                if ($statusTmp == 1){
+                // status
+                $status = '';
+                $statusTmp = rand(1,4);
+
+                if($statusTmp == 1) {
                     $status = 'waiting';
-                } elseif ($statusTmp == 2){
+                } elseif ($statusTmp == 2) {
                     $status = 'called';
                 } elseif ($statusTmp == 3) {
                     $status = 'not_attended';
@@ -45,14 +46,14 @@ class QueueTicketSeeder extends Seeder
                     'id_queue' => $queueID,
                     'queue_ticket_number' => $i + 1,
                     'queue_ticket_created_at' => $createdAt,
-                    'queue_ticket_called_at' => $status === 'called' ? $calledAt : null,
-                    'queue_ticket_called_by' => $status === 'called' ? 'user_' . rand(1, 10) : null,
+                    'queue_ticket_called_at' => $status === 'called' ?  $calledAt : null,
+                    'queue_ticket_called_by' => $status === 'called' ?  'user_' . rand(1,10) : null,
                     'queue_ticket_status' => $status,
                     'created_at' => now(),
-                    'updated_at' => now(),
+                    'updated_at' => now()
                 ]);
 
-                $createdAt = $calledAt->addMinutes(2);
+                $createdAt = $createdAt->addMinutes(2);
                 $calledAt = $createdAt->addMinutes(2);
             }
         }

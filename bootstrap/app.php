@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             '/dispenser/get-bundle-data',
             '/dispenser/get-ticket',
+            '/queues-display/get-bundle-data',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
