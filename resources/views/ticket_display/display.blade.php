@@ -9,10 +9,12 @@
             <i id="btn_options" class="fa-solid fa-gear btn-white p-2 !hidden"></i>
         </div>
 
-        <div class="main-card flex gap-4 w-full">
+        <div class="main-card flex-col flex gap-4 w-full">
 
-            <div id="queues" class="flex flex-wrap p-2 w-full border-1 border-slate-300 rounded-xl">
-                [filas de espera]
+            <div id="queues" class="flex flex-wrap p-2 w-full border-1 border-slate-300 rounded-xl"></div>
+
+            <div class="flex justify-end mt-6">
+                <i id="turn_sound_on" class="text-xl text-slate-300 fa-solid fa-volume-xmark"></i>
             </div>
 
         </div>
@@ -58,6 +60,10 @@
         const url = "{{ route('queues.display.get.bundle.data') }}";
         const queuesContainer = document.querySelector("#queues");
 
+        // object to control old and new ticket numbers
+        let ticketControl = null;
+        let playSound = false;
+
         // first call to fetch data
         getBundleData(url).then(data => {
             render(data);
@@ -73,6 +79,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        {{--credential: '{{ Crypt::encrypt($credential . "x") }}'--}}
                         credential: '{{ Crypt::encrypt($credential) }}'
                     })
                 });
@@ -97,12 +104,24 @@
         }
 
         function renderError(data) {
-            console.log(data);
+            queuesContainer.innerHTML = `
+                <div class="flex flex-col w-full justify-center p-10">
+                    <i class="text-6xl text-center text-red-500 fa-solid fa-triangle-exclamation mb-2"></i>
+                    <p class="text-center text-red-500 text-3xl">Aconteceu um erro</p>
+                    <p class="text-center text-red-500 text-sm">Solicite informações junto do balcão de atendimento.</p>
+                </div>
+            `
         }
 
         function renderQueues(queues) {
 
-            console.log('rendering queues');
+            // ticket control for the first time
+            if (ticketControl === null) {
+                ticketControl = {};
+                queues.forEach(queue =>{
+                    ticketControl[queue.hash_code] = 0;
+                });
+            }
 
             const queuesLayout = queues.length <= 4 ? 'w-1/1' : 'w-1/2';
 
@@ -126,8 +145,19 @@
                     colors.text_ticket = text_color;
                 }
 
+                // ticket control
+                let highlightQueue = false;
+                if (queue.tickets.length !== 0) {
+                    if (ticketControl[queue.hash_code] !== queue.tickets[0].queue_ticket_number) {
+                        highlightQueue = true;
+                        playSound = true;
+                        ticketControl[queue.hash_code] = queue.tickets[0].queue_ticket_number;
+                    }
+                }
+
+
                 const queueContent = document.createElement('div');
-                queueContent.className = `flex ${queuesLayout} gap-2 rounded-xl p-2`;
+                queueContent.className = `flex ${queuesLayout} gap-2 rounded-xl p-2 ${highlightQueue ? 'bg-yellow-500' : ''}`;
                 queueContent.innerHTML = `
 
                     <div class="text-center font-mono rounded-xl border-1 border-zinc-800 p-1" style="
@@ -149,13 +179,17 @@
 
                     <div class="w-1/3 rounded-xl border-1 border-zinc-800 p-3" style="background-color: ${colors.bg_ticket}">
                         <p class="text-7xl text-center font-mono" style="color: ${colors.text_ticket}">
-                            ${queue.tickets.length !== 0 ? queue.tickets[0].queue_ticket_number : ''}
+                            ${ticketControl[queue.hash_code]}
                         </p>
                     </div>
                 `;
 
                 queuesContainer.appendChild(queueContent);
             });
+
+            if (playSound){
+                playCallingSound();
+            }
 
         }
 
@@ -207,6 +241,18 @@
 
                 document.querySelector('#modal').style.display = 'none';
             });
+        });
+
+        // play sound when new ticket is called
+        function playCallingSound() {
+            const audio = new Audio('{{ asset('assets/sounds/effect_01.ogg') }}');
+            audio.play();
+            playSound = false
+        }
+
+        // turn sound on
+        document.querySelector("#turn_sound_on").addEventListener('dblclick', (event) => {
+            event.target.classList = "text-xl text-slate-300 fa-solid fa-volume-high";
         });
 
     </script>
