@@ -8,6 +8,7 @@ use App\Http\Controllers\TicketDispenserController;
 use App\Http\Middleware\TicketDispenserSession;
 use App\Http\Middleware\QueueDisplaySession;
 use App\Http\Controllers\QueuesDisplayController;
+use App\Http\Controllers\TicketCallerController;
 
 // ----------------------------------------------------------------
 // guest routes
@@ -63,6 +64,11 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/bundles/delete/{id}', [BundlesController::class, 'delete'])->name('bundles.delete');
     Route::get('/bundles/delete-confirm/{id}', [BundlesController::class, 'deleteConfirm'])->name('bundles.delete.confirm');
     Route::get('/bundles/restore/{id}', [BundlesController::class, 'restore'])->name('bundles.restore');
+
+    # CALLER ---------------------------------------------------------------
+    Route::get('/caller', [TicketCallerController::class, 'index'])->name('caller.home');
+    Route::get('/caller/queue-details/{id}', [TicketCallerController::class, 'queueDetails'])->name('caller.queue.details');
+
 
     # USER -----------------------------------------------------------------
 

@@ -6,6 +6,7 @@
         <a href="{{ route('bundles.home') }}" class="btn-white"><i class="fa-solid fa-table-list me-2"></i>Gestão de bundles</a>
         <a href="{{ route('dispenser') }}" class="btn-white" target="_blank"><i class="fa-regular fa-copy me-2"></i>Dispensador</a>
         <a href="{{ route('queues.display') }}" class="btn-white" target="_blank"><i class="fa-solid fa-tv me-2"></i>Apresentador</a>
+        <a href="{{ route('caller.home') }}" class="btn-white" target="_blank"><i class="fa-solid fa-share-from-square me-2"></i>Chamadas</a>
 
     </div>
 

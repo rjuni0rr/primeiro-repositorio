@@ -3,7 +3,8 @@
     <div class="main-card overflow-auto">
 
         <div class="flex justify-between items-center">
-            <p class="title-2">Bundle de filas</p>
+            <p class="title-3">Bundle de filas</p>
+            <p class="title-3">Empresa: <strong>{{ $company->company_name }}</strong></p>
         </div>
 
         <hr class="my-4">
