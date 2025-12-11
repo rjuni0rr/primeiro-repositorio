@@ -8,7 +8,7 @@
 
     <div class="main-card overflow-auto">
         <div class="flex justify-between items-center">
-            <p class="title-2">Filas de espera</p>
+            <p class="title-3">Filas de espera</p>
             <p class="title-3">Empresa: <strong>{{ $companyName }}</strong></p>
         </div>
 

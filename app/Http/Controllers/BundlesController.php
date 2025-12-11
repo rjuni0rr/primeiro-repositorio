@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
@@ -12,8 +13,12 @@ class BundlesController extends Controller
 {
     public function index()
     {
+        $company = Company::where('id', auth()->user()->id_company)
+            ->select('company_name')->first();
+
         $data = [
             'subtitle' => 'Bundles',
+            'company' => $company,
             'bundles' => auth()->user()->company->bundles()->withTrashed()->get()
         ];
 
