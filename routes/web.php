@@ -45,6 +45,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/queue/delete/{id}', [MainController::class, 'deleteQueue'])->name('queue.delete');
     Route::get('/queue/delete-confirm/{id}', [MainController::class, 'deleteQueueConfirm'])->name('queue.delete.confirm');
 
+    // perm delete
+    Route::get('/queue/perm-delete/{id}', [MainController::class, 'permDeleteQueue'])->name('perm.queue.delete');
+    Route::get('/queue/perm-delete-confirm/{id}', [MainController::class, 'permDeleteQueueConfirm'])->name('perm.queue.delete.confirm');
+
     // restore deleted queue
     Route::get('/queue/restore/{id}', [MainController::class, 'restoreQueue'])->name('queue.restore');
 
@@ -68,6 +72,7 @@ Route::middleware(['auth'])->group(function(){
     # CALLER ---------------------------------------------------------------
     Route::get('/caller', [TicketCallerController::class, 'index'])->name('caller.home');
     Route::get('/caller/queue-details/{id}', [TicketCallerController::class, 'queueDetails'])->name('caller.queue.details');
+    Route::get('/caller/queue-caller/{queue_id}/{ticket_id}', [TicketCallerController::class, 'queueCaller'])->name('caller.queue.caller');
 
 
     # USER -----------------------------------------------------------------
