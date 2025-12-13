@@ -18,6 +18,10 @@
 
         <div class="flex justify-center gap-6">
 
+            <div class="flex w-1/4 justify-center items-center rounded-xl border-1 border-slate-400">
+                <a href="{{ route('caller.queue.details', ['id' => Crypt::encrypt($queue->id)]) }}" class="btn !p-6"><i class="fa-solid fa-arrows-rotate text-5xl"></i></a>
+            </div>
+
             <div class="w-1/4 rounded-xl border-1 border-slate-400 text-center p-4">
                 <p class="title-3">Última senha chamada:</p>
                 @if(empty($lastTicket))
@@ -26,6 +30,22 @@
                     <p class="text-6xl font-bold">{{ $lastTicket->queue_ticket_number }}</p>
                     <p>Chamada em: <strong>{{ $lastTicket->queue_ticket_called_at }}</strong></p>
                     <p class="text-2xl" id="time_last_ticket"></p>
+
+                    <div class="flex justify-center gap-4 mt-4">
+                        <a href="{{ route('caller.queue.caller',
+                        [
+                            'queue_id' => Crypt::encrypt($queue->id),
+                            'ticket_id' => Crypt::encrypt($lastTicket->id),
+                            'status' => 'not_attended',
+                        ]) }}" class="btn !px-6">Não atendido</a>
+                        <a href="{{ route('caller.queue.caller',
+                        [
+                            'queue_id' => Crypt::encrypt($queue->id),
+                            'ticket_id' => Crypt::encrypt($lastTicket->id),
+                            'status' => 'dismissed',
+                        ]) }}" class="btn !px-6">Dispensado</a>
+                    </div>
+
                 @endif
             </div>
 
@@ -37,6 +57,22 @@
                     <p class="text-6xl font-bold">{{ $nextTicket->queue_ticket_number }}</p>
                     <p>Criada em: <strong>{{ $nextTicket->queue_ticket_created_at }}</strong></p>
                     <p class="text-2xl" id="time_next_ticket"></p>
+
+                    <div class="flex justify-center gap-4 mt-4">
+                        <a href="{{ route('caller.queue.caller',
+                        [
+                            'queue_id' => Crypt::encrypt($queue->id),
+                            'ticket_id' => Crypt::encrypt($nextTicket->id),
+                            'status' => 'not_attended',
+                        ]) }}" class="btn !px-6">Não atendido</a>
+                        <a href="{{ route('caller.queue.caller',
+                        [
+                            'queue_id' => Crypt::encrypt($queue->id),
+                            'ticket_id' => Crypt::encrypt($nextTicket->id),
+                            'status' => 'dismissed',
+                        ]) }}" class="btn !px-6">Dispensado</a>
+                    </div>
+
                 @endif
             </div>
 
@@ -47,6 +83,7 @@
                     <a href="{{ route('caller.queue.caller', [
                         'queue_id' => Crypt::encrypt($queue->id),
                         'ticket_id' => Crypt::encrypt($nextTicket->id),
+                        'status' => 'called'
                     ]) }}" class="btn !p-4 !text-4xl">Chamar</a>
                 @endif
             </div>
