@@ -72,8 +72,13 @@ Route::middleware(['auth'])->group(function(){
     # CALLER ---------------------------------------------------------------
     Route::get('/caller', [TicketCallerController::class, 'index'])->name('caller.home');
     Route::get('/caller/queue-details/{id}', [TicketCallerController::class, 'queueDetails'])->name('caller.queue.details');
-    Route::get('/caller/queue-caller/{queue_id}/{ticket_id}', [TicketCallerController::class, 'queueCaller'])->name('caller.queue.caller');
+    Route::get('/caller/queue-caller/{queue_id}/{ticket_id}/{status}', [TicketCallerController::class, 'queueCaller'])->name('caller.queue.caller');
 
+    Route::get('/caller/massive-dismiss/{queue_id}', [TicketCallerController::class, 'massiveDismiss'])->name('caller.queue.massive.dismiss');
+    Route::get('/caller/massive-dismiss/{queue_id}/confirm', [TicketCallerController::class, 'massiveDismissConfirm'])->name('caller.queue.massive.dismiss.confirm');
+
+//    Route::get('/caller/queue-caller/not_attended/{queue_id}/{ticket_id}', [TicketCallerController::class, 'markTicketAsNotAttended'])->name('caller.queue.ticket.not.attended');
+//    Route::get('/caller/queue-caller/dismissed/{queue_id}/{ticket_id}', [TicketCallerController::class, 'markTicketAsDismissed'])->name('caller.queue.ticket.dismissed');
 
     # USER -----------------------------------------------------------------
 

@@ -125,7 +125,7 @@ class TicketCallerController extends Controller
         return view('ticket_caller.queue_details', $data);
     }
 
-    public function queueCaller($queue_id, $ticket_id)
+    public function queueCaller($queue_id, $ticket_id, $status)
     {
         // check if the decrypted id are valid
         try {
@@ -147,14 +147,95 @@ class TicketCallerController extends Controller
             return redirect()->route('caller.home');
         }
 
-        // update the ticket status to "called"
-        $ticket->queue_ticket_status = 'called';
+        // check if the status is valid
+        $validStatus = ['called', 'not_attended', 'dismissed'];
+        if (!in_array($status, $validStatus)){
+            return redirect()->route('caller.home');
+        }
+
+        // update the ticket status to $status
+        $ticket->queue_ticket_status = $status;
         $ticket->queue_ticket_called_at = now();
         $ticket->updated_at = now();
         $ticket->queue_ticket_called_by = auth()->user()->email;
         $ticket->save();
 
         return redirect()->route('caller.queue.details', ['id' => Crypt::encrypt($queue->id)]);
+    }
 
+    public function massiveDismiss($queue_id)
+    {
+        // check if the decrypted id is a valid queue
+        try {
+            $queue_id = Crypt::decrypt($queue_id);
+        } catch (\Exception $e) {
+            return redirect()->route('caller.home');
+        }
+
+        // get the queue and the tickets, total tickets, etc.
+        $queue = Queue::with('tickets')
+            ->withTrashed()
+            ->withCount([
+                'tickets as total_tickets' => function($query) {
+                    $query->where('deleted_at', null);
+                },
+
+                'tickets as total_waiting' => function($query) {
+                    $query->where('queue_ticket_status', 'waiting');
+                },
+
+                'tickets as total_called' => function($query) {
+                    $query->where('queue_ticket_status', 'called');
+                },
+
+                'tickets as total_not_attended' => function($query) {
+                    $query->where('queue_ticket_status', 'not_attended');
+                },
+
+                'tickets as total_dismissed' => function($query) {
+                    $query->where('queue_ticket_status', 'dismissed');
+                },
+            ])
+            ->where('id', $queue_id)
+            ->where('id_company', auth()->user()->id_company)
+            ->first();
+
+        if(!$queue) {
+            return redirect()->route('caller.home');
+        }
+
+        $data = [
+            'subtitle' => 'Resposta massiva',
+            'queue' => $queue
+        ];
+
+        return view('ticket_caller.massive_dismissed', $data);
+    }
+
+    public function massiveDismissConfirm($queue_id)
+    {
+        // check if the decrypted id is a valid queue
+        try {
+            $queue_id = Crypt::decrypt($queue_id);
+        } catch (\Exception $e) {
+            return redirect()->route('caller.home');
+        }
+
+        // get the queue by id
+        $queue = Queue::with('tickets')->where('id', $queue_id)->where('id_company', auth()->user()->id_company)->first();
+
+        if (!$queue) {
+            return redirect()->route('called.home');
+        }
+
+        $queue->tickets()
+            ->where('queue_ticket_status', 'waiting')
+            ->where('deleted_at', null)
+            ->update([
+                'queue_ticket_status' => 'dismissed',
+                'updated_at' => now()
+            ]);
+
+        return redirect()->route('caller.home');
     }
 }
