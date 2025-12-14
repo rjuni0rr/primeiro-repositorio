@@ -47,8 +47,12 @@ class AuthController extends Controller
             // login user
             $this->loginUser($user);
 
-            // redirect to home page
-            return redirect()->route('home');
+            // redirect to home page or admin page if the user is admin
+            if ($user->role === 'sys-admin'){
+                return redirect()->route('admin.home');
+            } else {
+                return redirect()->route('home');
+            }
 
         } else {
 
