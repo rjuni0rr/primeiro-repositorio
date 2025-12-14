@@ -1,14 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\BundlesController;
 use App\Http\Controllers\TicketDispenserController;
+use App\Http\Controllers\AdminController;
+
 use App\Http\Middleware\TicketDispenserSession;
 use App\Http\Middleware\QueueDisplaySession;
+
 use App\Http\Controllers\QueuesDisplayController;
 use App\Http\Controllers\TicketCallerController;
+
 
 // ----------------------------------------------------------------
 // guest routes
@@ -88,6 +93,12 @@ Route::middleware(['auth'])->group(function(){
 
     // logout
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    # SYS-ADMIN ------------------------------------------------------------
+
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
+
+
 });
 
 

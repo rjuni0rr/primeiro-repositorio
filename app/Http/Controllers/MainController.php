@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Queue;
+use App\Models\Company;
 use App\Models\QueueTicket;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;

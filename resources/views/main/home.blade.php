@@ -22,7 +22,7 @@
         @if(@$queues->count() === 0)
             <div class="text-center my-12 text-gray-500">
                 <p class="text-lg">Sem registros encontrados</p>
-                <p class="text-sm">Adicione novos registros <a href="#" class="link">clicando aqui</a> ou no botão acima</p>
+                <p class="text-sm">Adicione novos registros <a href="{{ route('queue.create') }}" class="link">clicando aqui</a> ou no botão acima</p>
             </div>
         @else
             <div class="flex justify-between gap-4 my-4">
