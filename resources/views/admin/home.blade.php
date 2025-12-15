@@ -22,7 +22,7 @@
                 <thead class="bg-zinc-700 text-white">
                 <tr>
                     <th class="text-xs">Logo</th>
-                    <th class="text-xs">Nome do cliente</th>
+                    <th class="text-xs">Nome da Empresa</th>
                     <th class="text-xs">Email</th>
                     <th class="text-xs">Telefone</th>
                     <th class="text-xs">Estado</th>
@@ -34,13 +34,13 @@
 
                 <tbody>
                 @foreach($clients as $client)
-                    <tr class="">
+                    <tr class="{{ ($client->status === 'inactive' || $client->deleted_at) ? 'text-red-500' : ''}}">
                         <td class="w-1/16">[logo]</td>
                         <td class="w-1/16">{{ $client->company_name }}</td>
                         <td class="w-1/16">{{ $client->email }}</td>
                         <td class="w-1/16">{{ $client->phone }}</td>
-                        <td class="w-1/16 text-center">{{ $client->status }}</td>
-                        <td class="w-1/16">[total usuários]</td>
+                        <td class="w-1/16 text-center">{!! getClientStatusIcon(($client)) !!}</td>
+                        <td class="w-1/16">{{ $client->users_count }}</td>
                         <td class="w-1/16">{{ $client->created_at }}</td>
                         <td class="w-1/16">[ações]</td>
                     </tr>

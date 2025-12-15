@@ -99,3 +99,19 @@ if(!function_exists('getQueuePreview')) {
         return $previewHTML;
     }
 }
+
+if (!function_exists('getClientStatusIcon')){
+    function getClientStatusIcon($client)
+    {
+        $icons = [
+            'active' => '<i class="fa-regular fa-circle-check text-green-700" title="Ativa"></i>',
+            'inactive' => '<i class="fa-regular fa-circle-xmark text-red-700" title="Inativa"></i>',
+        ];
+
+        if ($client->deleted_at || $client->status === 'inactive'){
+            return $icons['inactive'];
+        } else {
+            return $icons['active'];
+        }
+    }
+}
