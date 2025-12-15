@@ -24,6 +24,9 @@ Route::middleware(['guest'])->group(function (){
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'loginSubmit'])->name('login.submit');
 
+    // conclude new client admin registration
+    Route::get('/conclude-registration/{code}', [AuthController::class, 'concludeRegistration'])->name('conclude.registration');
+
 });
 
 
@@ -99,9 +102,8 @@ Route::middleware(['auth', 'can:sys-admin'])->group(function(){
     Route::get('/admin/company/create', [AdminController::class, 'createCompany'])->name('admin.company.create');
     Route::post('/admin/company/create', [AdminController::class, 'createCompanySubmit'])->name('admin.company.create.submit');
 
-
-
 });
+
 
 // auth routes (just for client-admin)
 Route::middleware(['auth', 'can:client-admin'])->group(function(){

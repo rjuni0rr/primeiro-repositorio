@@ -92,63 +92,62 @@
 
     <script>
 
-        // document.querySelector("#company_logo").addEventListener('change', function (event){
-        //
-        //     const error_message = document.querySelector("#error_message")
-        //     error_message.textContent = '';
-        //
-        //     const [file] = event.target.files;
-        //     const preview = document.querySelector('#logo_preview');
-        //
-        //     if (file){
-        //         // valida todo o arquivo e remove todos os pontos exceto o ultimo
-        //         const validTypes = ['image/png', 'image/jpeg'];
-        //         const validExtensions = ['png', 'jpg', 'jpeg'];
-        //         const fileType = file.type;
-        //         const fileExtension = file.name.split('.').pop().toLowerCase();
-        //
-        //         // verifica se tudo está correto
-        //         if (!validTypes.includes(fileType) || !validExtensions.includes(fileExtension)){
-        //
-        //             error_message.textContent = "Selecione uma imagem PNG ou JPG.";
-        //             event.target.value = '';
-        //             preview.src = "#";
-        //             preview.classList.add('hidden');
-        //
-        //             return;
-        //         }
-        //
-        //         // cria uma nova imagem
-        //         const img = new Image();
-        //         img.onload = function () {
-        //
-        //             // verifica o tamanho da imagem
-        //             if (img.width === 200 && img.height === 200) {
-        //
-        //                 preview.src = URL.createObjectURL(file);
-        //                 preview.classList.remove('hidden');
-        //
-        //             } else {
-        //
-        //                 error_message.textContent = "A imagem deve ter exatamente um tamanho de 200x200 pixels.";
-        //                 event.target.value = '';
-        //                 preview.src = "#";
-        //                 preview.classList.add('hidden');
-        //
-        //             }
-        //
-        //         };
-        //
-        //         img.src = URL.createObjectURL(file);
-        //     } else {
-        //
-        //         preview.src = "#";
-        //         preview.classList.add('hidden');
-        //
-        //     }
-        //
-        // });
+        document.querySelector("#company_logo").addEventListener('change', function (event){
 
+            const error_message = document.querySelector("#error_message")
+            error_message.textContent = '';
+
+            const [file] = event.target.files;
+            const preview = document.querySelector('#logo_preview');
+
+            if (file){
+                // valida todo o arquivo e remove todos os pontos exceto o ultimo
+                const validTypes = ['image/png', 'image/jpeg'];
+                const validExtensions = ['png', 'jpg', 'jpeg'];
+                const fileType = file.type;
+                const fileExtension = file.name.split('.').pop().toLowerCase();
+
+                // verifica se tudo está correto
+                if (!validTypes.includes(fileType) || !validExtensions.includes(fileExtension)){
+
+                    error_message.textContent = "Selecione uma imagem PNG ou JPG.";
+                    event.target.value = '';
+                    preview.src = "#";
+                    preview.classList.add('hidden');
+
+                    return;
+                }
+
+                // cria uma nova imagem
+                const img = new Image();
+                img.onload = function () {
+
+                    // verifica o tamanho da imagem
+                    if (img.width === 200 && img.height === 200) {
+
+                        preview.src = URL.createObjectURL(file);
+                        preview.classList.remove('hidden');
+
+                    } else {
+
+                        error_message.textContent = "A imagem deve ter exatamente um tamanho de 200x200 pixels.";
+                        event.target.value = '';
+                        preview.src = "#";
+                        preview.classList.add('hidden');
+
+                    }
+
+                };
+
+                img.src = URL.createObjectURL(file);
+            } else {
+
+                preview.src = "#";
+                preview.classList.add('hidden');
+
+            }
+
+        });
 
     </script>
 </x-layouts.auth-layout>
