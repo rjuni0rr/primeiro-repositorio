@@ -25,6 +25,6 @@ class AdminController extends Controller
     private function getClientsList()
     {
         // return the clints list (all companies)
-        return Company::withTrashed()->get();
+        return Company::withTrashed()->withCount('users')->get();
     }
 }

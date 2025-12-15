@@ -16,7 +16,8 @@ use App\Http\Controllers\TicketCallerController;
 
 
 // ----------------------------------------------------------------
-// guest routes
+// guest routes (unauthenticated users - public access)
+
 Route::middleware(['guest'])->group(function (){
 
     // authentication (login)
@@ -25,9 +26,11 @@ Route::middleware(['guest'])->group(function (){
 
 });
 
+
 // ----------------------------------------------------------------
-// auth routes
-Route::middleware(['auth'])->group(function(){
+// auth routes (just for client-admin and clint-user)
+
+Route::middleware(['auth', 'can:client-admin,can:client-user'])->group(function(){
 
     Route::get('/', [MainController::class, 'index'])->name('home');
 
@@ -84,8 +87,30 @@ Route::middleware(['auth'])->group(function(){
 
 //    Route::get('/caller/queue-caller/not_attended/{queue_id}/{ticket_id}', [TicketCallerController::class, 'markTicketAsNotAttended'])->name('caller.queue.ticket.not.attended');
 //    Route::get('/caller/queue-caller/dismissed/{queue_id}/{ticket_id}', [TicketCallerController::class, 'markTicketAsDismissed'])->name('caller.queue.ticket.dismissed');
+});
 
-    # USER -----------------------------------------------------------------
+
+#------------------------------------------------------------------
+# SYS-ADMIN (just for admin)
+Route::middleware(['auth', 'can:sys-admin'])->group(function(){
+
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
+
+});
+
+
+// auth routes (just for client-admin)
+Route::middleware(['auth', 'can:client-admin'])->group(function(){
+
+    Route::get('/teste', function (){
+        echo "Aqui só pode entrar um client-admin. É proibido a entrada do admin ou de visitantes";
+    });
+
+});
+
+
+// change password and logout routes (for all authenticated users)
+Route::middleware('auth')->group(function () {
 
     // change password
     Route::get('/change-password', [AuthController::class, 'changePassword'])->name('change.password');
@@ -94,15 +119,10 @@ Route::middleware(['auth'])->group(function(){
     // logout
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    # SYS-ADMIN ------------------------------------------------------------
-
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
-
-
 });
 
 
-// ticket dispenser routes
+// ticket dispenser routes (public access)
 Route::middleware([TicketDispenserSession::class])->group(function (){
     Route::get('/dispenser', [TicketDispenserController::class, 'index'])->name('dispenser');
     Route::post('/dispenser/get-bundle-data', [TicketDispenserController::class, 'getBundleData'])->name('dispenser.get.bundle.data');
@@ -112,7 +132,7 @@ Route::middleware([TicketDispenserSession::class])->group(function (){
 Route::get('/dispenser/credentials', [TicketDispenserController::class, 'credentials'])->name('dispenser.credentials');
 Route::post('/dispenser/credentials', [TicketDispenserController::class, 'credentialsSubmit'])->name('dispenser.credentials.submit');
 
-// queues display routes
+// queues display routes (public access)
 Route::middleware([QueueDisplaySession::class])->group(function (){
     Route::get('/queues-display', [QueuesDisplayController::class, 'index'])->name('queues.display');
     Route::post('/queues-display/get-bundle-data', [QueuesDisplayController::class, 'getBundleData'])->name('queues.display.get.bundle.data');
