@@ -130,4 +130,12 @@ class AuthController extends Controller
 
         }
     }
+
+    public function concludeRegistration($code)
+    {
+
+        echo "Conclusão do registro<br>";
+        echo $code;
+
+    }
 }
