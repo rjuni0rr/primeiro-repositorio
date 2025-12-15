@@ -96,8 +96,12 @@ Route::middleware(['auth', 'can:sys-admin'])->group(function(){
 
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
 
-});
+    Route::get('/admin/company/create', [AdminController::class, 'createCompany'])->name('admin.company.create');
+    Route::post('/admin/company/create', [AdminController::class, 'createCompanySubmit'])->name('admin.company.create.submit');
 
+
+
+});
 
 // auth routes (just for client-admin)
 Route::middleware(['auth', 'can:client-admin'])->group(function(){

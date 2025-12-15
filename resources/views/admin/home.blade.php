@@ -9,7 +9,7 @@
         <hr class="my-4">
 
         <div class="mb-4">
-            <a href="#" class="btn"><i class="far fa-plus me-2"></i>Novo cliente</a>
+            <a href="{{ route('admin.company.create') }}" class="btn"><i class="far fa-plus me-2"></i>Novo cliente</a>
         </div>
 
         @if($clients->count() === 0)
@@ -19,6 +19,7 @@
             </div>
         @else
             <table id="table-clients">
+
                 <thead class="bg-zinc-700 text-white">
                 <tr>
                     <th class="text-xs">Logo</th>
@@ -34,18 +35,21 @@
 
                 <tbody>
                 @foreach($clients as $client)
-                    <tr class="{{ ($client->status === 'inactive' || $client->deleted_at) ? 'text-red-500' : ''}}">
-                        <td class="w-1/16">[logo]</td>
-                        <td class="w-1/16">{{ $client->company_name }}</td>
-                        <td class="w-1/16">{{ $client->email }}</td>
-                        <td class="w-1/16">{{ $client->phone }}</td>
-                        <td class="w-1/16 text-center">{!! getClientStatusIcon(($client)) !!}</td>
-                        <td class="w-1/16">{{ $client->users_count }}</td>
-                        <td class="w-1/16">{{ $client->created_at }}</td>
-                        <td class="w-1/16">[ações]</td>
+                    <tr class="{{ ($client->status === 'inactive' || $client->deleted_at) ? 'text-red-500 opacity-25' : ''}}">
+                        <td class="w-5/100">
+                            <img src="{{ getCompanyLogo($client->company_logo) }}" class="w-10 h-10 {{ (($client->status === 'inactive' || $client->deleted_at) ? 'grayscale-100' : '') }}" />
+                        </td>
+                        <td class="w-25/100">{{ $client->company_name }}</td>
+                        <td class="w-15/100"><i class="fa-solid fa-envelope me-2"></i>{{ $client->email }}</td>
+                        <td class="w-10/100"><i class="fa-solid fa-phone me-2"></i>{{ $client->phone }}</td>
+                        <td class="w-10/100 text-center">{!! getClientStatusIcon(($client)) !!}</td>
+                        <td class="w-10/100"><i class="fa-solid fa-users me-2"></i>{{ $client->users_count }}</td>
+                        <td class="w-10/100">{{ $client->created_at }}</td>
+                        <td class="w-15/100">[ações]</td>
                     </tr>
                 @endforeach
                 </tbody>
+
             </table>
 
         @endif
