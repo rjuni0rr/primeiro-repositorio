@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Storage;
+
 if(!function_exists('showValidationError')){
     function showValidationError($fieldName, $validationErrors)
     {
@@ -112,6 +114,18 @@ if (!function_exists('getClientStatusIcon')){
             return $icons['inactive'];
         } else {
             return $icons['active'];
+        }
+    }
+}
+
+if (!function_exists('getCompanyLogo')){
+    function getCompanyLogo($logo)
+    {
+        // check if the company logo exists inside the storage/app/public/company_logos
+        if ($logo && Storage::disk('public')->exists('company_logos/' . $logo)){
+            return asset('storage/company_logos/' . $logo);
+        } else {
+            return asset('storage/company_logos/_no_logo.png');
         }
     }
 }
