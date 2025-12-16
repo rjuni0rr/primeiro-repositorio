@@ -35,6 +35,7 @@
                         <label for="company_name" class="label">Nome do cliente</label>
                         <input type="text" name="company_name" id="company_name" class="input w-full" value="{{ old('company_name') }}"/>
                         {!! showValidationError('company_name', $errors) !!}
+                        {!! showServerError() !!}
                     </div>
 
                     <div class="mb-4">

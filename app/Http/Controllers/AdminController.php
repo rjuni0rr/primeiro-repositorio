@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -86,11 +87,60 @@ class AdminController extends Controller
 //        }
 
         $code = Str::random(64);
+
         try {
             Mail::to($request->admin_email)->send(new NewClientAdminEmail($code, $request->company_name));
-
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('server_error', 'Erro ao enviar o email. Por favor, tente novamente');
         }
+
+        // set the company logo
+        if ($request->hasFile('company_logo')) {
+
+            // create a unique file name
+            $fileName = Str::uuid(). '.' . $request->company_logo->extension();
+            $request->company_logo->storeAs('company_logos', $fileName, 'public');
+            $company_logo = $fileName;
+
+        } else {
+
+            // without logo
+            $company_logo = '_no_logo.png';
+
+        }
+
+        // create the company (client)
+        $company = new Company();
+        $company->company_name = $request->company_name;
+        $company->company_logo = $company_logo;
+        $company->uuid = Str::uuid();
+        $company->address = $request->address;
+        $company->phone = $request->phone;
+        $company->email = $request->email;
+        $company->status = $request->status;
+        $company->save();
+
+        // get the company_id
+        $id_company = $company->id;
+
+        // create the client-admin user
+        $user = new User();
+        $user->email = $request->admin_email;
+        $user->id_company = $id_company;
+        $user->role = 'client-admin';
+        $user->code = $code;
+        $user->code_expiration = now()->addMinutes(config('constants.MAIL_NEW_CLIENT_CODE_EXPIRATION'));
+        $user->active = $request->status === 'active' ? 1 : 0;
+        $user->save();
+
+        // display a success page
+        $data = [
+            'subtitle' => 'Sucesso',
+            'company_name' => $request->company_name,
+            'admin_email' => $request->admin_email
+        ];
+
+        return view('admin.create_company_success', $data);
+
     }
 }
