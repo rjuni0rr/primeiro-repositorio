@@ -26,6 +26,10 @@ Route::middleware(['guest'])->group(function (){
 
     // conclude new client admin registration
     Route::get('/conclude-registration/{code}', [AuthController::class, 'concludeRegistration'])->name('conclude.registration');
+    Route::get('/define-password', [AuthController::class, 'definePassword'])->name('define.password');
+    Route::post('/define-password', [AuthController::class, 'definePasswordSubmit'])->name('define.password.submit');
+
+    Route::get('/define-password-success', [AuthController::class, 'definePasswordSuccess'])->name('define.password.success');
 
 });
 

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 
 class AuthController extends Controller
 {
@@ -133,9 +135,106 @@ class AuthController extends Controller
 
     public function concludeRegistration($code)
     {
+        try {
+            $code = Crypt::decrypt($code);
+        } catch (DecryptException $e) {
+            return redirect()->route('login');
+        }
 
-        echo "Conclusão do registro<br>";
-        echo $code;
+        // get the user with the code
+        $user = User::where('code', $code)->first();
+        if (!$user){
+            return redirect()->route('login');
+        }
+
+        // check if the code has expired
+        if ($user->code_expiration < now()){
+
+            // hard delete of the company
+            $user->company()->forceDelete();
+
+            // hard delete of the user
+            $user->forceDelete();
+
+            return redirect()->route('login');
+        }
+
+        // place in session control variables
+        session()->put('define_password', true);
+        session()->put('user_id', Crypt::encrypt($user->id));
+
+        return redirect()->route('define.password');
 
     }
+
+    public function definePassword()
+    {
+        // check if we are in the define password process
+        if (!session()->has('define_password') || !session()->has('user_id')){
+            return redirect()->route('login');
+        }
+
+        $data = [
+            'subtitle' => 'Definir Senha',
+            'user' => User::find(Crypt::decrypt(session()->get('user_id')))
+        ];
+
+        return view('auth.define_password_frm', $data);
+    }
+
+    public function definePasswordSubmit(Request $request)
+    {
+//        dd(
+//            Crypt::decrypt(session()->get('user_id')),
+//            session()->get('define_password'),
+//            $request->all()
+//        );
+
+        // check if we are in the define password process
+        if (!session()->has('define_password') || !session()->has('user_id')){
+            return redirect()->route('login');
+        }
+
+        // form validation
+        $request->validate(
+            [
+                'password' => 'required|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,16}$/',
+            ],
+            [
+                'password.required' => 'A senha é obrigatória.',
+                'password.confirmed' => 'As duas senhas não se coincidem',
+                'password.regex' => 'A senha deve conter entre 6 e 16 caracteres, ter uma maiúscula, uma minúscula e um algarismo.'
+            ]
+        );
+
+        // get the user
+        $user = User::find(Crypt::decrypt(session()->get('user_id')));
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // update the password and clear all fields
+        $user->password = bcrypt($request->password);
+        $user->code = null;
+        $user->code_expiration = null;
+        $user->save();
+
+        return redirect()->route('define.password.success');
+    }
+
+    public function definePasswordSuccess()
+    {
+        // check if we are in the define password success process
+        if (!session()->has('define_password') || !session()->has('user_id')){
+            return redirect()->route('login');
+        }
+
+        // clear session control variables
+        session()->forget('define_password');
+        session()->forget('user_id');
+
+        return view('auth.define_password_success', ['subtitle' => 'Sucesso']);
+    }
+
 }
