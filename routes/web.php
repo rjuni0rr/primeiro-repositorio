@@ -106,6 +106,8 @@ Route::middleware(['auth', 'can:sys-admin'])->group(function(){
     Route::get('/admin/company/create', [AdminController::class, 'createCompany'])->name('admin.company.create');
     Route::post('/admin/company/create', [AdminController::class, 'createCompanySubmit'])->name('admin.company.create.submit');
 
+    Route::get('/admin/company/details/{id}', [AdminController::class, 'companyDetails'])->name('admin.company.details');
+
 });
 
 

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Queue;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\NewClientAdminEmail;
@@ -141,6 +143,60 @@ class AdminController extends Controller
         ];
 
         return view('admin.create_company_success', $data);
+
+    }
+
+    public function companyDetails($id)
+    {
+        // check if the decrypted bundle ID is valid
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.home');
+        }
+
+        // get company details
+        $company = Company::withTrashed()->find($id);
+        if(!$company) {
+            return redirect()->route('admin.home');
+        }
+
+        $users = User::where('id_company', $id)->get();
+
+        // get company queues with total tickets by status
+        $queues = Queue::withTrashed()->where('id_company', $id)->withCount([
+
+                'tickets as total_tickets' => function($query) {
+                    $query->where('deleted_at', null);
+                },
+
+                'tickets as total_waiting' => function($query) {
+                    $query->where('queue_ticket_status', 'waiting');
+                },
+
+                'tickets as total_called' => function($query) {
+                    $query->where('queue_ticket_status', 'called');
+                },
+
+                'tickets as total_not_attended' => function($query) {
+                    $query->where('queue_ticket_status', 'not_attended');
+                },
+
+                'tickets as total_dismissed' => function($query) {
+                    $query->where('queue_ticket_status', 'dismissed');
+                },
+
+            ])->get();
+
+        $data = [
+            'subtitle' => 'Detalhes do cliente',
+            'company' => $company,
+            'users' => $users,
+            'queues' => $queues,
+        ];
+
+        // display details view
+         return view('admin.company_details', $data);
 
     }
 }
