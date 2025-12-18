@@ -39,13 +39,17 @@
                         <td class="w-5/100">
                             <img src="{{ getCompanyLogo($client->company_logo) }}" class="w-10 h-10 {{ (($client->status === 'inactive' || $client->deleted_at) ? 'grayscale-100' : '') }}" />
                         </td>
-                        <td class="w-25/100">{{ $client->company_name }}</td>
-                        <td class="w-15/100"><i class="fa-solid fa-envelope me-2"></i>{{ $client->email }}</td>
+                        <td class="w-20/100">{{ $client->company_name }}</td>
+                        <td class="w-20/100"><i class="fa-solid fa-envelope me-2"></i>{{ $client->email }}</td>
                         <td class="w-10/100"><i class="fa-solid fa-phone me-2"></i>{{ $client->phone }}</td>
                         <td class="w-10/100 text-center">{!! getClientStatusIcon(($client)) !!}</td>
                         <td class="w-10/100"><i class="fa-solid fa-users me-2"></i>{{ $client->users_count }}</td>
                         <td class="w-10/100">{{ $client->created_at }}</td>
-                        <td class="w-15/100">[ações]</td>
+                        <td class="w-15/100">
+                            <div class="flex justify-end gap-2">
+                                <a href="{{ route('admin.company.details', ['id' => Crypt::encrypt($client->id)]) }}" class="btn" title="Detalhes"><i class="fa-solid fa-circle-info"></i></a>
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
