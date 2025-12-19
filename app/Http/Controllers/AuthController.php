@@ -7,6 +7,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use function Symfony\Component\String\u;
 
 class AuthController extends Controller
 {
@@ -46,6 +47,12 @@ class AuthController extends Controller
         // check if user exists and password matches
         if($user && Hash::check(trim($request->password), $user->password)){
 
+            // check if user belongs to an active company (except admin)
+            if ($user->role !== 'sys-admin' && ($user->company->deleted_at || $user->company->status != 'active')){
+                return redirect()->back()->withInput()->with('server_error', 'Login inválido.');
+            }
+
+
             // login user
             $this->loginUser($user);
 
@@ -63,6 +70,7 @@ class AuthController extends Controller
                 ->back()
                 ->withInput()
                 ->with('server_error', 'Login inválido.');
+
         }
     }
 

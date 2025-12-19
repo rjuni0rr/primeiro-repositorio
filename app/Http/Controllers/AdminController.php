@@ -199,4 +199,63 @@ class AdminController extends Controller
          return view('admin.company_details', $data);
 
     }
+
+    public function companyControlAccess($id)
+    {
+        // check if the id is valid
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.home');
+        }
+
+
+        // get company details
+        $company = Company::withTrashed()->find($id);
+        if (!$company) {
+            return redirect()->route('admin.home');
+        }
+
+        // return view
+        $data = [
+            'subtitle' => 'Controle de acesso',
+            'company' => $company
+        ];
+
+        return view('admin.control_company_access', $data);
+    }
+
+    public function companyControlAccessSubmit(Request $request)
+    {
+        // check if the inputs are valid and updates the company status
+        if(!$request->has('id') || !$request->has('action')) {
+            return redirect()->route('admin.home');
+        }
+
+        // check if the id is valid
+        try {
+            $id = Crypt::decrypt($request->id);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.home');
+        }
+
+        $action = $request->action;
+
+        // get the company details
+        $company = Company::withTrashed()->find($id);
+        if(!$company) {
+            return redirect()->route('admin.home');
+        }
+
+        // updates the company status
+        if($action === 'disable') {
+            $company->status = 'inactive';
+            $company->save();
+        } else if($action === 'enable') {
+            $company->status = 'active';
+            $company->save();
+        }
+
+        return redirect()->route('admin.home');
+    }
 }
