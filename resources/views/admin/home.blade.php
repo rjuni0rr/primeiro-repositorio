@@ -48,6 +48,7 @@
                         <td class="w-15/100">
                             <div class="flex justify-end gap-2">
                                 <a href="{{ route('admin.company.details', ['id' => Crypt::encrypt($client->id)]) }}" class="btn" title="Detalhes"><i class="fa-solid fa-circle-info"></i></a>
+                                <a href="{{ route('admin.company.control.access', ['id' => Crypt::encrypt($client->id)]) }}" class="btn" title="Gerenciar acesso"><i class="fa-solid fa-user-shield"></i></a>
                             </div>
                         </td>
                     </tr>

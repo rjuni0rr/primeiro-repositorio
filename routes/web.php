@@ -108,6 +108,9 @@ Route::middleware(['auth', 'can:sys-admin'])->group(function(){
 
     Route::get('/admin/company/details/{id}', [AdminController::class, 'companyDetails'])->name('admin.company.details');
 
+    Route::get('/admin/company/control-access/{id}', [AdminController::class, 'companyControlAccess'])->name('admin.company.control.access');
+    Route::post('/admin/company/control-access', [AdminController::class, 'companyControlAccessSubmit'])->name('admin.company.control.access.submit');
+
 });
 
 
