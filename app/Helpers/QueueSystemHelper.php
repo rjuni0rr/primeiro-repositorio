@@ -129,3 +129,31 @@ if (!function_exists('getCompanyLogo')){
         }
     }
 }
+
+if (!function_exists('getUserStatus')){
+    function getUserStatus($user)
+    {
+        if ($user->password === null || $user->active === 0 || $user->blocked_until > now()){
+            return '<i class="fa-regular fa-circle-xmark text-red-700 me-2" title="Inativo"></i> Inativo';
+        } else {
+            return '<i class="fa-regular fa-circle-check text-green-700 me-2" title="Ativo"></i> Ativo';
+        }
+
+    }
+}
+
+if (!function_exists('getUserRole')){
+    function getUserRole($role)
+    {
+        $roles = [
+            'sys-admin' => '<i class="fa-solid fa-user-gear me-2" title="Admistrador do sistema"></i>Admistrador do sistema',
+            'client-admin' => '<i class="fa-solid fa-user-shield me-2" title="Admistrador do cliente"></i>Admistrador do cliente',
+            'client-user' => '<i class="fa-solid fa-user me-2" title="Usuário"></i>Usuário',
+        ];
+
+        return $roles[$role] ?? 'Desconhecido';
+
+    }
+}
+
+

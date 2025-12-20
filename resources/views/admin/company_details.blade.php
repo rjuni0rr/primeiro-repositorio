@@ -40,8 +40,8 @@
                     @foreach($users as $user)
                         <tr>
                             <td class="w-50/100">{{ $user->email }}</td>
-                            <td class="w-25/100">[estado]</td>
-                            <td class="w-25/100">{{ $user->role }}</td>
+                            <td class="w-25/100">{!! getUserStatus($user) !!}</td>
+                            <td class="w-25/100">{!! GetUserRole($user->role) !!}  </td>
                         </tr>
                     @endforeach
 
