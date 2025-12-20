@@ -111,6 +111,10 @@ Route::middleware(['auth', 'can:sys-admin'])->group(function(){
     Route::get('/admin/company/control-access/{id}', [AdminController::class, 'companyControlAccess'])->name('admin.company.control.access');
     Route::post('/admin/company/control-access', [AdminController::class, 'companyControlAccessSubmit'])->name('admin.company.control.access.submit');
 
+    Route::get('/admin/company/delete/{id}', [AdminController::class, 'deleteCompany'])->name('admin.company.delete');
+    Route::get('/admin/company/delete-confirm/{id}', [AdminController::class, 'deleteCompanyConfirm'])->name('admin.company.delete.confirm');
+    Route::get('/admin/company/restore/{id}', [AdminController::class, 'restoreCompany'])->name('admin.company.restore');
+
 });
 
 
