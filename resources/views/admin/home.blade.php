@@ -35,9 +35,9 @@
 
                 <tbody>
                 @foreach($clients as $client)
-                    <tr class="{{ ($client->status === 'inactive' || $client->deleted_at) ? 'text-red-500 opacity-25' : ''}}">
+                    <tr class="{{ ($client->status === 'inactive' || $client->deleted_at) ? 'text-red-500' : ''}}">
                         <td class="w-5/100">
-                            <img src="{{ getCompanyLogo($client->company_logo) }}" class="w-10 h-10 {{ (($client->status === 'inactive' || $client->deleted_at) ? 'grayscale-100' : '') }}" />
+                            <img src="{{ getCompanyLogo($client->company_logo) }}" class="w-10 h-10 {{ (($client->status === 'inactive' || $client->deleted_at) ? 'grayscale-100 opacity-50' : '') }}" />
                         </td>
                         <td class="w-20/100">{{ $client->company_name }}</td>
                         <td class="w-20/100"><i class="fa-solid fa-envelope me-2"></i>{{ $client->email }}</td>
@@ -47,12 +47,14 @@
                         <td class="w-10/100">{{ $client->created_at }}</td>
                         <td class="w-15/100">
                             <div class="flex justify-end gap-2">
-                                <a href="{{ route('admin.company.details', ['id' => Crypt::encrypt($client->id)]) }}" class="btn" title="Detalhes"><i class="fa-solid fa-circle-info"></i></a>
-                                <a href="{{ route('admin.company.control.access', ['id' => Crypt::encrypt($client->id)]) }}" class="btn" title="Gerenciar acesso"><i class="fa-solid fa-user-shield"></i></a>
+
                                 @if($client->deleted_at === null)
+                                    <a href="{{ route('admin.company.details', ['id' => Crypt::encrypt($client->id)]) }}" class="btn" title="Detalhes"><i class="fa-solid fa-circle-info"></i></a>
+                                    <a href="{{ route('admin.company.control.access', ['id' => Crypt::encrypt($client->id)]) }}" class="btn" title="Gerenciar acesso"><i class="fa-solid fa-user-shield"></i></a>
                                     <a href="{{ route('admin.company.delete', ['id' => Crypt::encrypt($client->id)]) }}" class="btn-red" title="Eliminar cliente"><i class="fa-solid fa-trash"></i></a>
                                 @else
                                     <a href="{{ route('admin.company.restore', ['id' => Crypt::encrypt($client->id)]) }}" class="btn-green" title="Restaurar cliente"><i class="fa-solid fa-rotate-left"></i></a>
+                                    <a href="{{ route('admin.perm.company.delete', ['id' => Crypt::encrypt($client->id)]) }}" class="btn-red" title="Deletar Permanente"><i class="fa-regular fa-trash-can"></i></a>
                                 @endif
 
                             </div>

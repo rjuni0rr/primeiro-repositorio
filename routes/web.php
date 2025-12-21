@@ -101,19 +101,28 @@ Route::middleware(['auth', 'can:client-admin,can:client-user'])->group(function(
 # SYS-ADMIN (just for admin)
 Route::middleware(['auth', 'can:sys-admin'])->group(function(){
 
+    // home
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
 
+    // create company
     Route::get('/admin/company/create', [AdminController::class, 'createCompany'])->name('admin.company.create');
     Route::post('/admin/company/create', [AdminController::class, 'createCompanySubmit'])->name('admin.company.create.submit');
 
+    // company details
     Route::get('/admin/company/details/{id}', [AdminController::class, 'companyDetails'])->name('admin.company.details');
 
+    // access control company
     Route::get('/admin/company/control-access/{id}', [AdminController::class, 'companyControlAccess'])->name('admin.company.control.access');
     Route::post('/admin/company/control-access', [AdminController::class, 'companyControlAccessSubmit'])->name('admin.company.control.access.submit');
 
+    // delete company
     Route::get('/admin/company/delete/{id}', [AdminController::class, 'deleteCompany'])->name('admin.company.delete');
     Route::get('/admin/company/delete-confirm/{id}', [AdminController::class, 'deleteCompanyConfirm'])->name('admin.company.delete.confirm');
     Route::get('/admin/company/restore/{id}', [AdminController::class, 'restoreCompany'])->name('admin.company.restore');
+
+    // perm delete company
+    Route::get('/admin/perm-delete/{id}', [AdminController::class, 'permCompanyQueue'])->name('admin.perm.company.delete');
+    Route::get('/admin/perm-delete-confirm/{id}', [AdminController::class, 'permDeleteCompanyConfirm'])->name('admin.perm.company.delete.confirm');
 
 });
 
