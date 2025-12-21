@@ -10,6 +10,8 @@
 
         @canany(['client-admin', 'client-user'])
 
+            {!! getCompanyLogoImage(Auth::user()->company->company_logo, 8) !!}
+
             <a href="{{ route('home') }}" class="btn-white"><i class="fa-solid fa-house me-2"></i>Gestão de filas</a>
             <a href="{{ route('bundles.home') }}" class="btn-white"><i class="fa-solid fa-table-list me-2"></i>Gestão de bundles</a>
             <a href="{{ route('dispenser') }}" class="btn-white" target="_blank"><i class="fa-regular fa-copy me-2"></i>Dispensador</a>
@@ -18,7 +20,6 @@
 
             @can('client-admin')
                 {{-- funcionalidades do client admin --}}
-
             @endcan
 
         @endcanany

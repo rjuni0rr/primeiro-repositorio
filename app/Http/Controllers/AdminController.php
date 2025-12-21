@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\Queue;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -156,7 +157,7 @@ class AdminController extends Controller
         }
 
         // get company details
-        $company = Company::withTrashed()->find($id);
+        $company = Company::find($id);
         if(!$company) {
             return redirect()->route('admin.home');
         }
@@ -211,7 +212,7 @@ class AdminController extends Controller
 
 
         // get company details
-        $company = Company::withTrashed()->find($id);
+        $company = Company::find($id);
         if (!$company) {
             return redirect()->route('admin.home');
         }
@@ -242,7 +243,7 @@ class AdminController extends Controller
         $action = $request->action;
 
         // get the company details
-        $company = Company::withTrashed()->find($id);
+        $company = Company::find($id);
         if(!$company) {
             return redirect()->route('admin.home');
         }
@@ -269,7 +270,7 @@ class AdminController extends Controller
         }
 
         // get the company details
-        $company = Company::withTrashed()->find($id);
+        $company = Company::find($id);
         if(!$company) {
             return redirect()->route('admin.home');
         }
@@ -280,6 +281,94 @@ class AdminController extends Controller
         ];
 
         return view('admin.delete_company_confirm', $data);
+    }
+
+    public function deleteCompanyConfirm($id)
+    {
+        // check if the id is valid
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.home');
+        }
+
+        // get the company details
+        $company = Company::find($id);
+        if(!$company) {
+            return redirect()->route('admin.home');
+        }
+
+        // delete the queue
+        $company->delete();
+
+        return redirect()->route('admin.home');
+    }
+
+    public function restoreCompany($id)
+    {
+        // check if the id is valid
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.home');
+        }
+
+        // check if the queue exists and belongs to the authenticated user's company
+        $company = Company::withTrashed($id);
+        if(!$company){
+            return redirect()->route('admin.home');
+        }
+
+        // restore the soft deleted company
+        $company->restore();
+
+        return redirect()->route('admin.home');
+    }
+
+    public function permCompanyQueue($id)
+    {
+        // check if the id is valid
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.home');
+        }
+
+        // get the company details
+        $company = Company::withTrashed()->find($id);
+        if(!$company) {
+            return redirect()->route('admin.home');
+        }
+
+        // show the delete confirmation page
+        $data = [
+            'subtitle' => 'Eliminar Permanente',
+            'company' => $company
+        ];
+
+        return view('admin.company_perm_delete', $data);
+    }
+
+    public function permDeleteCompanyConfirm($id)
+    {
+        // check if the id is valid
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.home');
+        }
+
+        // get the company details
+        $company = Company::withTrashed()->find($id);
+        if(!$company) {
+            return redirect()->route('admin.home');
+        }
+
+        // perm delete the company
+        $company->forceDelete();
+
+        return redirect()->route('admin.home');
+
     }
 
 }
