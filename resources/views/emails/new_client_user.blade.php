@@ -1,7 +1,7 @@
 
 <p>Bem vindo(a) ao {{ config('app.name') }}</p>
-<p>Foi iniciado o registro de novo cliente <strong>{{ $company_name }}</strong></p>
-<p>Para conclusão do seu registro, como administrador do sistema, por favor, clique no link abaixo.</p>
+<p>Foi indicado como novo usúario da empresa <strong>{{ $company_name }}</strong></p>
+<p>Para conclusão do seu registro, como usuário do sistema, por favor, clique no link abaixo.</p>
 <p>
     <a href="{{ route('conclude.registration', ['code' => Crypt::encrypt($code)]) }}">Concluir registro</a>
 </p>

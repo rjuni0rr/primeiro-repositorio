@@ -19,7 +19,7 @@
             <a href="{{ route('caller.home') }}" class="btn-white" target="_blank"><i class="fa-solid fa-share-from-square me-2"></i>Chamadas</a>
 
             @can('client-admin')
-                {{-- funcionalidades do client admin --}}
+                <a href="{{ route('client.admin.home') }}" class="btn-white"><i class="fa-solid fa-users-gear me-2"></i>Gestão de usuários</a>
             @endcan
 
         @endcanany
