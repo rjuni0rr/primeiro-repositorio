@@ -124,6 +124,9 @@ Route::middleware(['auth', 'can:sys-admin'])->group(function(){
     Route::get('/admin/perm-delete/{id}', [AdminController::class, 'permCompanyQueue'])->name('admin.perm.company.delete');
     Route::get('/admin/perm-delete-confirm/{id}', [AdminController::class, 'permDeleteCompanyConfirm'])->name('admin.perm.company.delete.confirm');
 
+    // statistics
+    Route::get('/admin/statistics', [AdminController::class, 'statistics'])->name('admin.statistics');
+
 });
 
 
