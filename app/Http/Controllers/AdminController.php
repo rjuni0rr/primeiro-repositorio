@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Queue;
+use App\Models\QueueTicket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -371,4 +372,70 @@ class AdminController extends Controller
 
     }
 
+    public function statistics()
+    {
+        $data = [
+            'subtitle' => 'Estatisticas',
+            'statsCompanies' => $this->getActiveAndInactiveCompaniesCount(),
+            'statsUsersByState' => $this->getUserByState(),
+            'statsAllTicketsByStatus' => $this->statsAllTicketsByStatus(),
+        ];
+
+        return view('admin.statistics', $data);
+
+    }
+
+    private function getActiveAndInactiveCompaniesCount()
+    {
+        $totalCompanies = Company::withTrashed()->count();
+
+        $totalActive = Company::where('status', 'active')->count();
+
+        $totalInactive = Company::withTrashed()
+            ->where(function ($query){
+                $query->where('status', 'inactive')->orWhereNotNull('deleted_at');
+            })->count();
+
+        return [
+            'total' => $totalCompanies,
+            'active' => $totalActive,
+            'inactive' => $totalInactive,
+        ];
+    }
+
+    private function getUserByState()
+    {
+        $totalUsers = User::withTrashed()->where('role', '!=', 'sys-admin')->count();
+
+        $totalUsersActive = User::where('active', 1)->where('role', '!=', 'sys-admin')->count();
+
+        $totalUsersInactive = User::withTrashed('active', 1)->where(function ($query){
+            $query->where('active', 0)->orWhereNotNull('deleted_at');
+        })->where('role', '!=', 'sys-admin')->count();
+
+        $totalUsersBlocked = User::where('blocked_until', '>', now())->where('role', '!=', 'sys-admin')->count();
+
+        $totalWithoutPassword = User::whereNull('password')->where('role', '!=', 'sys-admin')->count();
+
+        return [
+            'total' => $totalUsers,
+            'active' => $totalUsersActive,
+            'inactive' => $totalUsersInactive,
+            'blocked' => $totalUsersBlocked,
+            'without_password' => $totalWithoutPassword,
+        ];
+    }
+
+    private function statsAllTicketsByStatus()
+    {
+        return [
+
+            'total' => QueueTicket::count(),
+            'waiting' => QueueTicket::where('queue_ticket_status', 'waiting')->count(),
+            'called' => QueueTicket::where('queue_ticket_status', 'called')->count(),
+            'not_attended' => QueueTicket::where('queue_ticket_status', 'not_attended')->count(),
+            'dismissed' => QueueTicket::where('queue_ticket_status', 'dismissed')->count(),
+
+        ];
+    }
 }
