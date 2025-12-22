@@ -7,6 +7,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\BundlesController;
 use App\Http\Controllers\TicketDispenserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClientAdminController;
 
 use App\Http\Middleware\TicketDispenserSession;
 use App\Http\Middleware\QueueDisplaySession;
@@ -35,9 +36,9 @@ Route::middleware(['guest'])->group(function (){
 
 
 // ----------------------------------------------------------------
-// auth routes (just for client-admin and clint-user)
+// auth routes (just for client-admin and client-user)
 
-Route::middleware(['auth', 'can:client-admin,can:client-user'])->group(function(){
+Route::middleware(['auth', 'can:client'])->group(function(){
 
     Route::get('/', [MainController::class, 'index'])->name('home');
 
@@ -133,9 +134,10 @@ Route::middleware(['auth', 'can:sys-admin'])->group(function(){
 // auth routes (just for client-admin)
 Route::middleware(['auth', 'can:client-admin'])->group(function(){
 
-    Route::get('/teste', function (){
-        echo "Aqui só pode entrar um client-admin. É proibido a entrada do admin ou de visitantes";
-    });
+    Route::get('/client-admin', [ClientAdminController::class, 'index'])->name('client.admin.home');
+
+    Route::get('/client-admin/user/create', [ClientAdminController::class, 'createUser'])->name('client.admin.create');
+    Route::post('/client-admin/user/create', [ClientAdminController::class, 'createUserSubmit'])->name('client.admin.create.submit');
 
 });
 

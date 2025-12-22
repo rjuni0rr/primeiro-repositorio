@@ -35,5 +35,10 @@ class AppServiceProvider extends ServiceProvider
             return $user->role === 'client-user';
         });
 
+        // gates to generic client
+        Gate::define('client', function ($user){
+            return ($user->role === 'client-admin' || $user->role === 'client-user');
+        });
+
     }
 }

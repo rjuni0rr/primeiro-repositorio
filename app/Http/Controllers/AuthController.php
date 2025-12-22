@@ -226,6 +226,7 @@ class AuthController extends Controller
         $user->password = bcrypt($request->password);
         $user->code = null;
         $user->code_expiration = null;
+        $user->active = 1;
         $user->save();
 
         return redirect()->route('define.password.success');

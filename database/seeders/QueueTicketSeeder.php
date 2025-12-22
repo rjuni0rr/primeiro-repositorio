@@ -20,7 +20,7 @@ class QueueTicketSeeder extends Seeder
 
         foreach ($queueIDs as $queueID) {
 
-            $totalTickets = rand(50, 200);
+            $totalTickets = rand(500, 1000);
 
             $createdAt = now();
             $calledAt = now()->addMinutes(2);
