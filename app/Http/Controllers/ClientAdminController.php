@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ForcePasswordChangeEmail;
 use App\Models\User;
 use App\Mail\NewClientUserEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -75,5 +77,108 @@ class ClientAdminController extends Controller
             'email' => $request->email
         ]);
 
+    }
+
+    public function forcePasswordReset($id)
+    {
+        if (!$user = $this->checkUserIsValid($this->decryptUserId($id))){
+            return $this->redirectOnInvalidUser();
+        }
+
+        $data = [
+            'subtitle' => 'Forçar alteração de senha',
+            'user' => $user,
+        ];
+
+        return view('client_admin.force_password_change_confirm', $data);
+    }
+
+    public function forcePasswordResetConfirm($id)
+    {
+        if(!$user = $this->checkUserIsValid($this->decryptUserId($id))) {
+            return $this->redirectOnInvalidUser();
+        }
+
+        // generate new code
+        $code = Str::random(64);
+
+        try{
+            Mail::to($user->email)->send(new ForcePasswordChangeEmail($code));
+        } catch(\Exception $e) {
+            return redirect()->route('client.admin.home');
+        }
+
+        // update the user data in the database
+        $user->password = null;
+        $user->blocked_until = null;
+        $user->deleted_at = null;
+        $user->active = 1;
+        $user->code = $code;
+        $user->code_expiration = now()->addMinutes(config('constants.MAIL_NEW_CLIENT_CODE_EXPIRATION'));
+        $user->save();
+
+        return redirect()->route('client.admin.home');
+    }
+
+    public function deactivateUser($id)
+    {
+
+    }
+
+    public function activateUser($id)
+    {
+
+    }
+
+    public function blockUser($id)
+    {
+
+    }
+
+    public function unblockUser($id)
+    {
+
+    }
+
+    public function deleteUser($id)
+    {
+
+    }
+
+    public function restoreUser($id)
+    {
+
+    }
+
+
+    private function decryptUserId($id)
+    {
+        // check if the id is valid
+        try {
+            return Crypt::decrypt($id);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    private function checkUserIsValid($id)
+    {
+        // check if the user with this id belongs to the same company of the authenticated user
+        $user = User::withTrashed()
+            ->where('id', $id)
+            ->where('id_company', Auth()->user()->id_company)
+            ->where('id', '!=', Auth()->user()->id)
+            ->first();
+
+        if (!$user){
+            return null;
+        }
+
+        return $user;
+    }
+
+    private function redirectOnInvalidUser()
+    {
+        return redirect()->route('client.admin.home');
     }
 }

@@ -9,7 +9,7 @@
             </div>
 
             <div class="text-center mb-8">
-                <strong>{{ $user->email }}</strong>, <br>para conclusão do registro, por favor, defina a sua senha de acesso.
+                <strong>{{ $user->email }}</strong>, <br>Por favor, defina a sua senha de acesso.
             </div>
 
 

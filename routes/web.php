@@ -28,9 +28,13 @@ Route::middleware(['guest'])->group(function (){
     // conclude new client admin registration
     Route::get('/conclude-registration/{code}', [AuthController::class, 'concludeRegistration'])->name('conclude.registration');
     Route::get('/define-password', [AuthController::class, 'definePassword'])->name('define.password');
-    Route::post('/define-password', [AuthController::class, 'definePasswordSubmit'])->name('define.password.submit');
 
+    // define password
+    Route::post('/define-password', [AuthController::class, 'definePasswordSubmit'])->name('define.password.submit');
     Route::get('/define-password-success', [AuthController::class, 'definePasswordSuccess'])->name('define.password.success');
+
+    // password reset
+    Route::get('/password-reset/{code}', [AuthController::class, 'passwordReset'])->name('password.reset');
 
 });
 
@@ -136,8 +140,25 @@ Route::middleware(['auth', 'can:client-admin'])->group(function(){
 
     Route::get('/client-admin', [ClientAdminController::class, 'index'])->name('client.admin.home');
 
+    // create user
     Route::get('/client-admin/user/create', [ClientAdminController::class, 'createUser'])->name('client.admin.create');
     Route::post('/client-admin/user/create', [ClientAdminController::class, 'createUserSubmit'])->name('client.admin.create.submit');
+
+    // force password
+    Route::get('/client-admin/user/force-password-reset/{id}', [ClientAdminController::class, 'forcePasswordReset'])->name('client.admin.user.password.reset');
+    Route::get('/client-admin/user/force-password-reset/{id}/confirm', [ClientAdminController::class, 'forcePasswordResetConfirm'])->name('client.admin.user.password.reset.confirm');
+
+    // deactivate and activate
+    Route::get('/client-admin/user/deactivate/{id}', [ClientAdminController::class, 'deactivateUser'])->name('client.admin.user.deactivate');
+    Route::get('/client-admin/user/activate/{id}', [ClientAdminController::class, 'activateUser'])->name('client.admin.user.activate');
+
+    // block and unblock
+    Route::get('/client-admin/user/block/{id}', [ClientAdminController::class, 'blockUser'])->name('client.admin.user.block');
+    Route::get('/client-admin/user/unblock/{id}', [ClientAdminController::class, 'unblockUser'])->name('client.admin.user.unblock');
+
+    // delete and restore
+    Route::get('/client-admin/user/delete/{id}', [ClientAdminController::class, 'deleteUser'])->name('client.admin.user.delete');
+    Route::get('/client-admin/user/restore/{id}', [ClientAdminController::class, 'restoreUser'])->name('client.admin.user.restore');
 
 });
 

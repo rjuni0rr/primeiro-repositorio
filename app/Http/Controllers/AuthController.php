@@ -246,4 +246,28 @@ class AuthController extends Controller
         return view('auth.define_password_success', ['subtitle' => 'Sucesso']);
     }
 
+    public function passwordReset($code)
+    {
+        // check if the code is valid
+        try {
+            $code = Crypt::decrypt($code);
+        } catch (DecryptException $e) {
+            return redirect()->route('login');
+        }
+
+        // get the user with the code
+        $user = User::where('code', $code)->where('code_expiration', '>', now())->first();
+        if (!$user){
+            return redirect()->route('login');
+        }
+
+        // place in session control variables
+        session()->put('define_password', true);
+        session()->put('user_id', Crypt::encrypt($user->id));
+
+        return redirect()->route('define.password');
+
+
+    }
+
 }

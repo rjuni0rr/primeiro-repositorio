@@ -6,10 +6,3 @@
     <a href="{{ route('conclude.registration', ['code' => Crypt::encrypt($code)]) }}">Concluir registro</a>
 </p>
 <p>Este link vai estar disponível até <strong>{{ now()->addMinutes(config('constants.MAIL_NEW_CLIENT_CODE_EXPIRATION')) }}</strong></p>
-
-
-
-
-
-
-
