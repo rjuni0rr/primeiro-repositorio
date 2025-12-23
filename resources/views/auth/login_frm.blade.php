@@ -3,7 +3,7 @@
 
         <div class="main-card w-100">
             <div class="flex justify-center items-center mb-8">
-                <img src="#" class="w-10 h-10 me-2" alt="Logo">
+                <img src="{{ asset('assets/images/favicon.png') }}" class="w-10 h-10 me-2" alt="Logo">
                 <h3 class="text-3xl uppercase">{{ config('app.name') }}</h3>
             </div>
 

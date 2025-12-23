@@ -1,6 +1,7 @@
-<x-layouts.auth-layout subtitle="{{ empty($subtitle) ? '' : $subtitle }}">
+<x-layouts.auth-layout subtitle="{{ empty($subtitle) ? '' : $subtitle  }}">
 
     <div class="main-card overflow-auto">
+
         <div class="flex justify-between items-center">
             <p class="title-2">Editar bundle</p>
             <a href="{{ route('bundles.home') }}" class="btn"><i class="fa-solid fa-arrow-left me-2"></i>Voltar</a>
@@ -27,13 +28,13 @@
                     </div>
 
                     <div class="mb-4 w-full">
-                        <p class="label">Credential username</p>
+                        <p class="label">Credencial username</p>
                         <p class="text-slate-400">{{ $bundle->credential_username }}</p>
                     </div>
 
                     <div class="mb-4">
                         <p class="title-3 mb-2">Filas de espera do bundle</p>
-                        <div class="main-card p-4 !bg-slate-100" id="div_queues"></div>
+                        <div class="main-card !bg-slate-100 !p-4" id="div_queues"></div>
                         {!! showValidationError('queues_list', $errors) !!}
                     </div>
 
@@ -45,6 +46,7 @@
 
             <div class="w-full">
                 <p class="text-slate-600 font-bold">Filas de espera</p>
+
                 @if($queues->isEmpty())
                     <p class="text-slate-400 text-center mt-12">Não existem filas de espera.</p>
                 @else
@@ -81,7 +83,7 @@
     </div>
 
     <script>
-        $(document).ready(function (){
+        $(document).ready(function(){
             $('#table-queues').DataTable({
                 language: {
                     url: "{{ asset('assets/datatables/pt-PT.json') }}"
@@ -95,22 +97,18 @@
         renderQueues(queues);
 
         document.querySelectorAll("#btn_queue").forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function(){
+
                 const queueHashCode = this.getAttribute('data-queue-hash-code');
-                const queueName = this.getAttribute('data-queue-name');
+                const queuename = this.getAttribute('data-queue-name');
 
                 // check if the queue already exists in the bundle
                 if(queues.some(queue => queue.hash_code === queueHashCode)) {
-                    // remove a queue do bundle, considerando que queues e igual a todas as queues do bundle, exceto a que é diferente
                     queues = queues.filter(queue => queue.hash_code !== queueHashCode);
                 } else {
-                    // check if the limit is ok
-                    if (queues.length == 8) {
-                        return;
-                    }
                     queues.push({
-                        'hash_code': queueHashCode,
-                        'name': queueName,
+                        hash_code: queueHashCode,
+                        name: queuename
                     });
                 }
 
@@ -119,10 +117,11 @@
             });
         });
 
-        function renderQueues(queues){
+        function renderQueues(queues) {
+
             let html = '';
-            if (queues.length === 0){
-                html = '<p class="text-slate-400 text-center">Não existem filas de espera.</p>';
+            if(queues.length === 0) {
+                html = '<p class="text-center text-slate-400">Não existem filas de espera no bundle</p>';
             } else {
                 queues.forEach(queue => {
                     html += '<div class="flex bg-white justify-between items-center p-2 mb-1 rounded-lg border-gray-300">';
@@ -135,17 +134,16 @@
 
             // update the hidden input with the JSON string of queues
             document.querySelector('input[name="queues_list"]').value = JSON.stringify(queues);
-
         }
 
-        function deleteFromQueue(hash_code){
+        function deleteFromQueue(hash_code) {
             queues = queues.filter(q => q.hash_code !== hash_code)
             renderQueues(queues);
         }
 
         function getQueueListFromInputHidden() {
             const queueListInput = document.querySelector('input[name="queues_list"]');
-            if (queueListInput) {
+            if(queueListInput) {
                 try {
                     return JSON.parse(queueListInput.value);
                 } catch (e) {
@@ -154,25 +152,6 @@
             }
             return [];
         }
-
-        // credential generation
-        document.querySelector("#btn_generate_credential_username").addEventListener('click', function () {
-            fetch("{{ route('bundles.generate.credential.value', ['num_chars' => 64]) }}")
-                .then(response => response.json())
-                .then(data => {
-                    document.querySelector("#credential_username").value = data.hash;
-                })
-                .catch(error => console.error('Error: ', error));
-        });
-
-        document.querySelector("#btn_generate_credential_password").addEventListener('click', function () {
-            fetch("{{ route('bundles.generate.credential.value', ['num_chars' => 64]) }}")
-                .then(response => response.json())
-                .then(data => {
-                    document.querySelector("#credential_password").value = data.hash;
-                })
-                .catch(error => console.error('Error: ', error));
-        });
 
     </script>
 
