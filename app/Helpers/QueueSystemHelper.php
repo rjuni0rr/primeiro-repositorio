@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 if(!function_exists('showValidationError')){
     function showValidationError($fieldName, $validationErrors)
@@ -211,4 +213,75 @@ if (!function_exists('getUserCurrentState')) {
 
     }
 }
+
+if (!function_exists('getUserAvailableActions')) {
+    function getUserAvailableActions($user)
+    {
+        $actions = [];
+
+        // if the user is the authenticated one
+        if ($user->id === Auth::user()->id) {
+            return $actions;
+        }
+
+        // delete and recover - available to all users, except the authenticated one
+        $user->deleted_at !== null ? $actions[] = 'Recuperar' : $actions[] = 'Eliminar';
+
+        // activate and deactivate - available to all users, except the authenticated one
+        $user->active === 1 ? $actions[] = 'Desativar' : $actions[] = 'Ativar';
+
+        // block and unblock - available to all users, except the authenticated one
+        ($user->blocked_until !== null && $user->blocked_until > now()) ? $actions[] = 'Desbloquear' : $actions[] = 'Bloquear';
+
+        // reset the password - available to all users, except the authenticated one
+        $actions[] = 'Senha';
+
+
+        // define links
+        $links = [];
+
+        // user id
+        $id = ['id' => Crypt::encrypt($user->id)];
+
+        // password
+        if (in_array('Senha', $actions)){
+            $links[] = '<a href="' . route('client.admin.user.password.reset', $id) . '" class="btn-white" title="Alterar senha"><i class="fa-solid fa-key"></i></a>';
+        }
+
+
+        // activate and deactivate
+        if (in_array('Ativar', $actions)){
+            $links[] = '<a href="' . route('client.admin.user.activate', $id) . '" class="btn-green" title="Ativar"><i class="fa-solid fa-circle-check"></i></a>';
+        }
+
+        if (in_array('Desativar', $actions)){
+            $links[] = '<a href="' . route('client.admin.user.deactivate', $id) . '" class="btn-red" title="Desativar"><i class="fa-solid fa-circle-xmark"></i></a>';
+        }
+
+
+        // block and unblock
+        if (in_array('Bloquear', $actions)){
+            $links[] = '<a href="' . route('client.admin.user.block', $id) . '" class="btn-red" title="Bloquear"><i class="fa-solid fa-user-lock"></i></a>';
+        }
+
+        if (in_array('Desbloquear', $actions)){
+            $links[] = '<a href="' . route('client.admin.user.unblock', $id) . '" class="btn-green" title="Desbloquear"><i class="fa-solid fa-lock-open"></i></a>';
+        }
+
+
+        // delete and recover
+        if (in_array('Eliminar', $actions)){
+            $links[] = '<a href="' . route('client.admin.user.delete', $id) . '" class="btn-red" title="Eliminar"><i class="fa-solid fa-trash"></i></a>';
+        }
+
+        if (in_array('Recuperar', $actions)){
+            $links[] = '<a href="' . route('client.admin.user.restore', $id) . '" class="btn-green" title="Recuperar"><i class="fa-solid fa-trash-arrow-up"></i></a>';
+        }
+
+
+        return $links;
+    }
+}
+
+
 

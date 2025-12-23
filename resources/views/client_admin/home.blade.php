@@ -29,7 +29,11 @@
                     <td class="w-1/12">{!! getUserRoleIcon($user->role) !!}</td>
                     <td class="w-3/12">{!! getUserCurrentState($user) !!}</td>
                     <td class="w-2/12">{{ $user->last_login ? $user->last_login : 'Login nunca efetuado' }}</td>
-                    <td class="w-2/12">[acoes]</td>
+                    <td class="w-2/12">
+                        <div class="flex w-full justify-end gap-2">
+                            {!! implode("", getUserAvailableActions($user)) !!}
+                        </div>
+                    </td>
                 </tr>
             @endforeach
             <tbody>
