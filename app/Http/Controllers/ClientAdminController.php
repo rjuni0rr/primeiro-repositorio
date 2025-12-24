@@ -122,34 +122,164 @@ class ClientAdminController extends Controller
 
     public function deactivateUser($id)
     {
+        // check if the user is valid
+        if(!$user = $this->checkUserIsValid($this->decryptUserId($id))) {
+            return $this->redirectOnInvalidUser();
+        }
 
+        // deactivate the user
+        $user->active = 0;
+        $user->save();
+
+        return redirect()->route('client.admin.home');
     }
 
     public function activateUser($id)
     {
+        // check if the user is valid
+        if(!$user = $this->checkUserIsValid($this->decryptUserId($id))) {
+            return $this->redirectOnInvalidUser();
+        }
 
+        // activate the user
+        $user->active = 1;
+        $user->save();
+
+        return redirect()->route('client.admin.home');
     }
 
     public function blockUser($id)
     {
+        // check if the user is valid
+        if(!$user = $this->checkUserIsValid($this->decryptUserId($id))) {
+            return $this->redirectOnInvalidUser();
+        }
+
+        $data = [
+            'subtitle' => 'Bloquear usuário',
+            'user' => $user
+        ];
+
+        return view('client_admin.block_user_frm', $data);
+    }
+
+    public function blockUserSubmit(Request $request)
+    {
+        // form validation
+        $request->validate(
+            [
+                'blocked_until' => 'required|date|after:now',
+            ],
+            [
+                'blocked_until.required' => 'A data/hora deve ser selecionada.',
+                'blocked_until.date' => 'A data/hora selecionada é inválida.',
+                'blocked_until.after' => 'A data/hora selecionada deverá ser após a data/hora atual.',
+
+            ]
+        );
+
+        // check if user_id exists
+        if (empty($request->user_id)){
+            return redirect()->route('client.admin.home');
+        }
+
+        // check if the user is valid
+        if(!$user = $this->checkUserIsValid($this->decryptUserId($request->user_id))) {
+            return $this->redirectOnInvalidUser();
+        }
+
+        // block user
+        $user->blocked_until = $request->blocked_until;
+        $user->save();
+
+        return redirect()->route('client.admin.home');
 
     }
 
     public function unblockUser($id)
     {
+        // check if the user is valid
+        if(!$user = $this->checkUserIsValid($this->decryptUserId($id))) {
+            return $this->redirectOnInvalidUser();
+        }
 
+        // block user
+        $user->blocked_until = null;
+        $user->save();
+
+        return redirect()->route('client.admin.home');
     }
 
     public function deleteUser($id)
     {
+        // check if the user is valid
+        if(!$user = $this->checkUserIsValid($this->decryptUserId($id))) {
+            return $this->redirectOnInvalidUser();
+        }
 
+        // delete user (soft delete)
+        $user->delete();
+
+        return redirect()->route('client.admin.home');
     }
 
     public function restoreUser($id)
     {
+        // check if the user is valid
+        if(!$user = $this->checkUserIsValid($this->decryptUserId($id))) {
+            return $this->redirectOnInvalidUser();
+        }
+
+        // restore user
+        $user->restore();
+
+        return redirect()->route('client.admin.home');
+    }
+
+    public function permDeleteClient($id)
+    {
+        // check if the user is valid
+        if(!$user = $this->checkUserIsValid($this->decryptUserId($id))) {
+            return $this->redirectOnInvalidUser();
+        }
+
+        // show the delete confirmation page
+        $data = [
+            'subtitle' => 'Eliminar Permanente',
+            'user' => $user
+        ];
+
+        return view('client_admin.client_perm_delete', $data);
+    }
+
+    public function permDeleteClientConfirm($id)
+    {
+        // check if the user is valid
+        if(!$user = $this->checkUserIsValid($this->decryptUserId($id))) {
+            return $this->redirectOnInvalidUser();
+        }
+
+        // perm delete the company
+        $user->forceDelete();
+
+        return redirect()->route('client.admin.home');
 
     }
 
+    public function editCompany()
+    {
+        $data = [
+            'subtitle' => 'Editar empresa',
+            'company' => Auth()->user()->company
+        ];
+
+        return view('client_admin.edit_company_frm', $data);
+    }
+
+    public function editCompanySubmit(Request $request)
+    {
+        // ...
+    }
 
     private function decryptUserId($id)
     {

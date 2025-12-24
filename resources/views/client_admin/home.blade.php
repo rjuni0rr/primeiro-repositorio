@@ -30,9 +30,16 @@
                     <td class="w-3/12">{!! getUserCurrentState($user) !!}</td>
                     <td class="w-2/12">{{ $user->last_login ? $user->last_login : 'Login nunca efetuado' }}</td>
                     <td class="w-2/12">
-                        <div class="flex w-full justify-end gap-2">
-                            {!! implode("", getUserAvailableActions($user)) !!}
-                        </div>
+                        @if($user->deleted_at === null)
+                            <div class="flex w-full justify-end gap-2">
+                                {!! implode("", getUserAvailableActions($user)) !!}
+                            </div>
+                        @else
+                            <div class="flex w-full justify-end gap-2">
+                                <a href="{{ route('client.admin.user.restore', ['id' => Crypt::encrypt($user->id)]) }}" class="btn-green" title="Restaurar cliente"><i class="fa-solid fa-rotate-left"></i></a>
+                                <a href="{{ route('client.admin.user.perm.delete', ['id' => Crypt::encrypt($user->id)]) }}" class="btn-red" title="Deletar Permanente"><i class="fa-regular fa-trash-can"></i></a>
+                            </div>
+                        @endif
                     </td>
                 </tr>
             @endforeach
