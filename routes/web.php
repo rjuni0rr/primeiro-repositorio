@@ -154,11 +154,20 @@ Route::middleware(['auth', 'can:client-admin'])->group(function(){
 
     // block and unblock
     Route::get('/client-admin/user/block/{id}', [ClientAdminController::class, 'blockUser'])->name('client.admin.user.block');
+    Route::post('/client-admin/user/block', [ClientAdminController::class, 'blockUserSubmit'])->name('client.admin.user.block.submit');
     Route::get('/client-admin/user/unblock/{id}', [ClientAdminController::class, 'unblockUser'])->name('client.admin.user.unblock');
 
     // delete and restore
     Route::get('/client-admin/user/delete/{id}', [ClientAdminController::class, 'deleteUser'])->name('client.admin.user.delete');
     Route::get('/client-admin/user/restore/{id}', [ClientAdminController::class, 'restoreUser'])->name('client.admin.user.restore');
+
+    // perm delete
+    Route::get('/client-admin/perm-delete/{id}', [ClientAdminController::class, 'permDeleteClient'])->name('client.admin.user.perm.delete');
+    Route::get('/client-admin/perm-delete-confirm/{id}', [ClientAdminController::class, 'permDeleteClientConfirm'])->name('client.admin.user.perm.delete.confirm');
+
+    // edit company
+    Route::get('/client-admin/company/edit', [ClientAdminController::class, 'editCompany'])->name('client.admin.company.edit');
+    Route::post('/client-admin/company/edit', [ClientAdminController::class, 'editCompanySubmit'])->name('client.admin.company.edit.submit');
 
 });
 

@@ -23,6 +23,14 @@
         <script src="{{ asset('assets/apexcharts/apexcharts.js') }}"></script>
     @endif
 
+    {{--  flatpikr --}}
+
+    @if(!empty($flatpickr))
+        <link rel="stylesheet" href="{{ asset('assets/flatpickr/flatpickr.min.css') }}">
+        <script src="{{ asset('assets/flatpickr/flatpickr.min.js') }}"></script>
+        <script src="{{ asset('assets/flatpickr/pt.js') }}"></script>
+    @endif
+
     {{--  CSS  --}}
     @vite('resources/css/app.css')
 
