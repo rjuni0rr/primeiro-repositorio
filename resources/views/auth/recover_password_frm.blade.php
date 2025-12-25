@@ -1,4 +1,5 @@
 <x-layouts.guest-layout subtitle="{{ empty($subtitle) ? '' : $subtitle }}">
+
     <div class="flex flex-col justify-center h-screen items-center">
 
         <div class="main-card w-100">
@@ -7,40 +8,31 @@
                 <h3 class="text-3xl uppercase">{{ config('app.name') }}</h3>
             </div>
 
-            <form action="{{ route('login.submit') }}" method="post" novalidate>
+            <form action="{{ route('recover.password.submit') }}" method="post" novalidate>
 
                 @csrf
 
+                <p class="text-center my-6">Para recuperar a sua senha, por favor, indique o seu email de usuário.</p>
+
                 <div class="mb-4">
-                    <label for="username" class="label">Usuário</label>
+                    <label for="username" class="label">Email de usuário</label>
                     <input type="email" class="input w-full" id="username" name="username" placeholder="Usuário" value="{{ old('username') }}">
                     {!! showValidationError('username', $errors) !!}
                     {!! showServerError() !!}
                 </div>
 
-                <div class="mb-4">
-                    <label for="password" class="label">Senha</label>
-                    <input type="password" class="input w-full" id="password" name="password" placeholder="Senha">
-                    {!! showValidationError('password', $errors) !!}
-                </div>
-
                 <div class="text-center mb-4">
-                    <button type="submit" class="btn w-full">Entrar</button>
+                    <button type="submit" class="btn w-full">Recuperar senha</button>
                 </div>
 
             </form>
 
             <div class="text-center">
-                Esqueceu a senha? <a href="{{ route('recover.password') }}" class="link">Clique aqui</a>
+                Lembrou da senha? <a href="{{ route('login') }}" class="link">Clique aqui</a>
             </div>
 
         </div>
 
-        <div class="flex justify-center items-center text-xs text-zinc-700 mt-4">
-            Versão <a href="#" class="link ms-2">{{ config('constants.APP_VERSION') }}</a>
-            <span class="mx-2">|</span>
-            <a href="#" class="link">Termos de Utilização</a>
-        </div>
-
     </div>
+
 </x-layouts.guest-layout>

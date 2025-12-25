@@ -4,6 +4,7 @@
 
         <div class="flex justify-between">
             <p class="title-3">Gestão de usuários</p>
+            <p class="title-3">Empresa: <strong>{{ Auth::user()->company->company_name }}</strong></p>
         </div>
 
         <hr class="my-4">

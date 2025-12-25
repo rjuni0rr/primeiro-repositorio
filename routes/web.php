@@ -36,6 +36,14 @@ Route::middleware(['guest'])->group(function (){
     // password reset
     Route::get('/password-reset/{code}', [AuthController::class, 'passwordReset'])->name('password.reset');
 
+    // recover password
+    Route::get('/recover-password', [AuthController::class, 'recoverPassword'])->name('recover.password');
+    Route::post('/recover-password', [AuthController::class, 'recoverPasswordSubmit'])->name('recover.password.submit');
+
+    // define new password
+    Route::get('/define-new-password/{code}', [AuthController::class, 'recoverPasswordDefineNew'])->name('recover.password.define.new');
+    Route::post('/define-new-password', [AuthController::class, 'recoverPasswordDefineNewSubmit'])->name('recover.password.define.new.submit');
+
 });
 
 

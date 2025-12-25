@@ -13,8 +13,6 @@
 
             @csrf
 
-            <input type="hidden" name="current_logo" id="current_logo">
-
             <div class="flex gap-6">
 
                 {{-- company logo --}}
@@ -127,7 +125,6 @@
                 const preview = document.querySelector("#logo_preview");
                 preview.src = existingLogoURL;
                 preview.classList.remove('hidden');
-                document.querySelector("#current_logo").value="{{ $company->company_logo }}"
             }
         });
 

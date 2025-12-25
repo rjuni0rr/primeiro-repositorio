@@ -278,7 +278,61 @@ class ClientAdminController extends Controller
 
     public function editCompanySubmit(Request $request)
     {
-        dd($request->all());
+        // form validation
+        $request->validate(
+            [
+                'company_logo' => 'image|mimes:jpeg,png|dimensions:width=200,height=200',
+                'company_name' => 'required|max:100|unique:companies,company_name,' . Auth()->user()->company->id,
+                'address' => 'required|max:255',
+                'phone' => 'required|max:20',
+                'email' => 'required|email|max:100',
+            ],
+            [
+                'company_logo.image' => 'O arquivo enviado não é uma imagem válida.',
+                'company_logo.mimes' => 'A imagem deve estar no formato JPEG ou PNG.',
+                'company_logo.dimensions' => 'A imagem deve ter exatamente 200x200 pixels.',
+
+                'company_name.required' => 'O nome da empresa é obrigatório.',
+                'company_name.max' => 'O nome da empresa não pode exceder 100 caracteres.',
+                'company_name.unique' => 'Já existe outra empresa com esse nome.',
+
+                'address.required' => 'O endereço é obrigatório.',
+                'address.max' => 'O endereço não pode exceder 255 caracteres.',
+
+                'phone.required' => 'O telefone é obrigatório.',
+                'phone.max' => 'O telefone não pode exceder 20 caracteres.',
+
+                'email.required' => 'O email é obrigatório.',
+                'email.email' => 'O email deve ser um endereço de email válido.',
+                'email.max' => 'O email não pode exceder 100 caracteres.',
+            ]
+        );
+
+        $company = Auth()->user()->company;
+        // check if a new logo was uploaded or the same logo was kept
+        if ($request->hasFile('company_logo')) {
+
+            // delete the old logo if not the default one
+            if ($company->company_logo !== '_no_logo.png' && file_exists(public_path('assets/images/company_logos/' . $company->company_logo))) {
+                unlink(public_path('assets/images/company_logos/' . $company->company_logo));
+            }
+
+            // create a unique file name
+            $fileName = Str::uuid().'.'. $request->company_logo->extension();
+
+            // store the new logo
+            $request->company_logo->move(public_path('assets/images/company_logos' . $fileName));
+            $company->company_logo = $fileName;
+        }
+
+        // update company details
+        $company->company_name = $request->company_name;
+        $company->address = $request->address;
+        $company->phone = $request->phone;
+        $company->email = $request->email;
+        $company->save();
+
+        return redirect()->route('client.admin.home');
     }
 
     private function decryptUserId($id)
