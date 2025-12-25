@@ -278,7 +278,7 @@ class ClientAdminController extends Controller
 
     public function editCompanySubmit(Request $request)
     {
-        // ...
+        dd($request->all());
     }
 
     private function decryptUserId($id)
