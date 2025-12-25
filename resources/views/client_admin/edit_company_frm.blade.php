@@ -1,4 +1,4 @@
-<x-layouts.auth-layout subtitle="{{ empty($subtitle) ? '' : $subtitle }}">
+<x-layouts.auth-layout subtitle="{{ empty($subtitle) ? '' : $subtitle  }}">
 
     <div class="main-card overflow-auto">
 
@@ -9,10 +9,11 @@
 
         <hr class="my-4">
 
-        {{--    enctype serve para permitir que o form envie imagens   --}}
         <form action="{{ route('client.admin.company.edit.submit') }}" method="POST" enctype="multipart/form-data" novalidate>
 
             @csrf
+
+            <input type="hidden" name="current_logo" id="current_logo">
 
             <div class="flex gap-6">
 
@@ -24,7 +25,7 @@
                     {!! showValidationError('company_logo', $errors) !!}
 
                     <div class="flex justify-center mt-8">
-                        <img src="#" alt="Logo" id="logo_preview" class="hidden w-[200] h-[200] border-1 border-slate-300">
+                        <img id="logo_preview" src="#" alt="Logo" class="hidden w-[200] h-[200] border-1 border-slate-300">
                     </div>
 
                 </div>
@@ -33,14 +34,14 @@
 
                     <div class="mb-4">
                         <label for="company_name" class="label">Nome da empresa</label>
-                        <input type="text" name="company_name" id="company_name" class="input w-full" value="{{ old('company_name') }}"/>
+                        <input type="text" name="company_name" id="company_name" class="input w-full" value="{{ old('company_name', $company->company_name) }}"/>
                         {!! showValidationError('company_name', $errors) !!}
                         {!! showServerError() !!}
                     </div>
 
                     <div class="mb-4">
                         <label for="address" class="label">Endereço</label>
-                        <input type="text" name="address" id="address" class="input w-full" value="{{ old('address') }}"/>
+                        <input type="text" name="address" id="address" class="input w-full" value="{{ old('address', $company->address) }}"/>
                         {!! showValidationError('address', $errors) !!}
                     </div>
 
@@ -48,13 +49,13 @@
 
                         <div class="w-1/3">
                             <label for="phone" class="label">Telefone</label>
-                            <input type="text" name="phone" id="phone" class="input w-full" value="{{ old('phone') }}"/>
+                            <input type="text" name="phone" id="phone" class="input w-full" value="{{ old('phone', $company->phone) }}" />
                             {!! showValidationError('phone', $errors) !!}
                         </div>
 
                         <div class="w-2/3">
                             <label for="email" class="label">Email</label>
-                            <input type="email" name="email" id="email" class="input w-full" value="{{ old('email') }}"/>
+                            <input type="email" name="email" id="email" class="input w-full" value="{{ old('email', $company->email) }}" />
                             {!! showValidationError('email', $errors) !!}
                         </div>
 
@@ -72,62 +73,64 @@
 
     <script>
 
-        document.querySelector("#company_logo").addEventListener('change', function (event){
+        document.querySelector("#company_logo").addEventListener('change', function(event){
 
-            const error_message = document.querySelector("#error_message")
+            const error_message = document.querySelector("#error_message");
             error_message.textContent = '';
 
             const [file] = event.target.files;
-            const preview = document.querySelector('#logo_preview');
+            const preview = document.querySelector("#logo_preview");
 
-            if (file){
-                // valida todo o arquivo e remove todos os pontos exceto o ultimo
+            if(file) {
+
                 const validTypes = ['image/png', 'image/jpeg'];
                 const validExtensions = ['png', 'jpg', 'jpeg'];
                 const fileType = file.type;
                 const fileExtension = file.name.split('.').pop().toLowerCase();
 
-                // verifica se tudo está correto
-                if (!validTypes.includes(fileType) || !validExtensions.includes(fileExtension)){
-
+                if(!validTypes.includes(fileType) || !validExtensions.includes(fileExtension)) {
                     error_message.textContent = "Selecione uma imagem PNG ou JPG.";
                     event.target.value = '';
                     preview.src = "#";
                     preview.classList.add('hidden');
-
                     return;
                 }
 
-                // cria uma nova imagem
                 const img = new Image();
-                img.onload = function () {
-
-                    // verifica o tamanho da imagem
-                    if (img.width === 200 && img.height === 200) {
+                img.onload = function() {
+                    if(img.width === 200 && img.height === 200) {
 
                         preview.src = URL.createObjectURL(file);
                         preview.classList.remove('hidden');
 
                     } else {
-
-                        error_message.textContent = "A imagem deve ter exatamente um tamanho de 200x200 pixels.";
+                        error_message.textContent = "A imagem deve ter exatamente 200x200 pixels.";
                         event.target.value = '';
                         preview.src = "#";
                         preview.classList.add('hidden');
-
                     }
-
                 };
 
                 img.src = URL.createObjectURL(file);
-            } else {
 
+            } else {
                 preview.src = "#";
                 preview.classList.add('hidden');
-
             }
 
         });
 
+        // load existing logo if available
+        window.addEventListener('DOMContentLoaded', () => {
+            const existingLogoURL = "{{ asset('assets/images/company_logos/' . $company->company_logo) }}";
+            if(existingLogoURL) {
+                const preview = document.querySelector("#logo_preview");
+                preview.src = existingLogoURL;
+                preview.classList.remove('hidden');
+                document.querySelector("#current_logo").value="{{ $company->company_logo }}"
+            }
+        });
+
     </script>
+
 </x-layouts.auth-layout>
