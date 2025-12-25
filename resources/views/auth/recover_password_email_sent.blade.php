@@ -4,10 +4,10 @@
 
         <div class="main-card w-200">
 
-            <p class="text-2xl font-bold text-center text-green-700 my-6">A senha foi definida com sucesso.</p>
+            <p class="text-2xl font-bold text-center text-green-700 my-6">Email enviado com sucesso para {{ $email }}!</p>
 
             <div class="text-center">
-                <a href="{{ route('home') }}" class="btn"><i class="fa-solid-fa-check-me-2"></i>Voltar</a>
+                <a href="{{ route('login') }}" class="btn"><i class="fa-solid-fa-check-me-2"></i>Voltar</a>
             </div>
 
         </div>
