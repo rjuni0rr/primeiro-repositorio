@@ -37,9 +37,9 @@
         </div>
 
         <div class="flex justify-center items-center text-xs text-zinc-700 mt-4">
-            Versão <a href="#" class="link ms-2">{{ config('constants.APP_VERSION') }}</a>
+            Versão <a href="{{ route('changelog') }}" class="link ms-2">{{ config('constants.APP_VERSION') }}</a>
             <span class="mx-2">|</span>
-            <a href="#" class="link">Termos de Utilização</a>
+            <a href="{{ route('terms.conditions') }}" class="link">Termos de Utilização</a>
         </div>
 
     </div>
