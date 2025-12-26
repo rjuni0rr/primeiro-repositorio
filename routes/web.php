@@ -8,6 +8,7 @@ use App\Http\Controllers\BundlesController;
 use App\Http\Controllers\TicketDispenserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientAdminController;
+use App\Http\Controllers\GeneralController;
 
 use App\Http\Middleware\TicketDispenserSession;
 use App\Http\Middleware\QueueDisplaySession;
@@ -43,6 +44,12 @@ Route::middleware(['guest'])->group(function (){
     // define new password
     Route::get('/define-new-password/{code}', [AuthController::class, 'recoverPasswordDefineNew'])->name('recover.password.define.new');
     Route::post('/define-new-password', [AuthController::class, 'recoverPasswordDefineNewSubmit'])->name('recover.password.define.new.submit');
+
+    // terms and conditions
+    Route::get('/terms-and-conditions', [GeneralController::class, 'termsAndConditions'])->name('terms.conditions');
+
+    // changelog
+    Route::get('/changelog', [GeneralController::class, 'changelog'])->name('changelog');
 
 });
 
