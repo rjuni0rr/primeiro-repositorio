@@ -29,7 +29,7 @@
                             <label for="credential_username" class="label">Credencial username</label>
                             <div class="flex gap-2">
                                 <input type="text" id="credential_username" name="credential_username" class="input w-full" placeholder="Credential user" value="{{ old('credential_username') }}">
-                                <button id="btn_generate_credential_username" class="btn"><i class="fa-solid fa-rotate"></i></button>
+                                <button type="button" id="btn_generate_credential_username" class="btn"><i class="fa-solid fa-rotate"></i></button>
                             </div>
                             {!! showValidationError('credential_username', $errors) !!}
                         </div>
@@ -38,7 +38,7 @@
                             <label for="credential_password" class="label">Credencial senha</label>
                             <div class="flex gap-2">
                                 <input type="text" id="credential_password" name="credential_password" class="input w-full" placeholder="Credential password" {{ old('credential_password') }}>
-                                <button id="btn_generate_credential_password" class="btn"><i class="fa-solid fa-rotate"></i></button>
+                                <button type="button" id="btn_generate_credential_password" class="btn"><i class="fa-solid fa-rotate"></i></button>
                             </div>
                             {!! showValidationError('credential_password', $errors) !!}
                         </div>
