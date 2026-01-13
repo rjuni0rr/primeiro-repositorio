@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
@@ -10,11 +11,14 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientAdminController;
 use App\Http\Controllers\GeneralController;
 
+
 use App\Http\Middleware\TicketDispenserSession;
 use App\Http\Middleware\QueueDisplaySession;
 
 use App\Http\Controllers\QueuesDisplayController;
 use App\Http\Controllers\TicketCallerController;
+
+
 
 
 // ----------------------------------------------------------------
@@ -220,4 +224,16 @@ Route::get('/queues-display/credentials', [QueuesDisplayController::class, 'cred
 Route::post('/queues-display/credentials', [QueuesDisplayController::class, 'credentialsSubmit'])->name('queues.display.credentials.submit');
 
 
+Route::get('/clear-app', function () {
 
+    Artisan::call('storage:unlink');
+    Artisan::call('storage:link');
+
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('optimize:clear'); # Remove cache = resetar
+
+    dd("ola");
+});
