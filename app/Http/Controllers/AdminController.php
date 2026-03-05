@@ -379,6 +379,7 @@ class AdminController extends Controller
             'statsCompanies' => $this->getActiveAndInactiveCompaniesCount(),
             'statsUsersByState' => $this->getUserByState(),
             'statsAllTicketsByStatus' => $this->statsAllTicketsByStatus(),
+            'statsAllUsersByRole' => $this->getRoleCount(),
         ];
 
         return view('admin.statistics', $data);
@@ -401,6 +402,21 @@ class AdminController extends Controller
             'active' => $totalActive,
             'inactive' => $totalInactive,
         ];
+    }
+
+    private function getRoleCount()
+    {
+        $totalRole = User::withTrashed()->count();
+
+        $totalClientAdmin = User::where('role', 'client-admin')->count();
+        $totalClientUser = User::where('role', 'client-user')->count();
+
+        return [
+            'total' => $totalRole,
+            'client-admin' => $totalClientAdmin,
+            'client-user' => $totalClientUser,
+        ];
+
     }
 
     private function getUserByState()

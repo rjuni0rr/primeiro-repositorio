@@ -18,7 +18,6 @@
     <script src="{{ asset('assets/coloris/coloris.min.js') }}"></script>
 
     {{--  ApexCharts -- conditional loading --}}
-
     @if(!empty($apexcharts))
         <script src="{{ asset('assets/apexcharts/apexcharts.js') }}"></script>
     @endif

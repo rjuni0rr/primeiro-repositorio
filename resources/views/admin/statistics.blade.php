@@ -32,6 +32,11 @@
                 <div id="chart_3"></div>
             </div>
 
+            <div class="main-card w-1/2 p-6">
+                <p class="title-1">Usuários por tipo</p>
+                <p class="title-3">Total: <strong>{{ $statsAllUsersByRole['total'] }}</strong></p>
+                <div id="chart_4"></div>
+            </div>
         </div>
     </div>
     <script>
@@ -103,6 +108,31 @@
             colors: ["#0000AA", "#00AA00", "#AA0000", "#AAAAAA"],
         });
         chart_3.render();
+
+        let chart_4 = new ApexCharts(document.querySelector("#chart_4"), {
+            chart: {
+                type: "bar",
+                height: 300,
+                toolbar: {
+                    show: true,
+                }
+            },
+            plotOptions: {
+                bar: {
+                    distributed: true,
+                    horizontal: true
+                }
+            },
+            series: [{
+                name: 'Usuários',
+                data: [{{ implode(',', array_slice($statsAllUsersByRole, 1)) }}]
+            }],
+            xaxis: {
+                categories: ['Usuários', 'Administradores']
+            },
+            colors: ["#0000AA", "#00AA00"],
+        });
+        chart_4.render();
     </script>
 
 
